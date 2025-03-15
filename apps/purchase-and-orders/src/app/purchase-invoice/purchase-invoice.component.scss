@@ -1,0 +1,42 @@
+@import 'node_modules/@sadad/component-lib/src/styles/partials/color-variables';
+
+.purchase-invoice-state {
+  width: 140px !important;
+  font-size: 0.8rem;
+
+  > span:not(.cl-column-title) {
+    display: inline-block;
+    min-width: 110px;
+    text-align: center;
+    border: solid 1px transparent;
+    padding: 5px 10px;
+    border-radius: 20px;
+  }
+
+  &.initial-submit-invoice > span:not(.cl-column-title) {
+    color: map-get($green, 'darken-2');
+    background-color: map-get($green, 'lighten-5');
+    border-color: map-get($green, 'darken-2');
+  }
+  &.wait-for-delivery-invoice > span:not(.cl-column-title) {
+    color: map-get($amber, 'darken-2');
+    background-color: map-get($amber, 'lighten-5');
+    border-color: map-get($amber, 'darken-2');
+  }
+  &.wait-for-payment > span:not(.cl-column-title) {
+    color: map-get($purple, 'darken-2');
+    background-color: map-get($purple, 'lighten-5');
+    border-color: map-get($purple, 'darken-2');
+  }
+  &.paid > span:not(.cl-column-title) {
+    color: map-get($blue, 'darken-2');
+    background-color: map-get($blue, 'lighten-5');
+    border-color: map-get($blue, 'darken-2');
+  }
+  &.canceled > span:not(.cl-column-title) {
+    color: map-get($red, 'darken-2');
+    background-color: map-get($red, 'lighten-5');
+    border-color: map-get($red, 'darken-2');
+  }
+}
+

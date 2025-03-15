@@ -1,0 +1,56 @@
+<section [formGroup]="formGroup">
+  <div class="row no-bottom-margin">
+
+    <!-- feature title-->
+    <div class="col s12 l4 cl-form-field">
+      <label class="cl-input-label cl-required">{{ 'base-data.feature-title' | translate }}</label>
+      <cl-input-text placeholder="..."
+                     formControlName="label"
+                     clValidatorErrors
+                     [showValidatorErrors]="formGroup.controls['label'].touched && !!formGroup.controls['label'].errors"/>
+    </div>
+
+    <!-- feature type -->
+    <div class="col s12 l4 cl-form-field">
+      <label class="cl-input-label cl-required">{{ 'base-data.feature-type' | translate }}</label>
+      <cl-select formControlName="type"
+                 [filterable]="goodsFeatureTypeList && goodsFeatureTypeList.length > 5"
+                 [options]="goodsFeatureTypeList"
+                 (onSelect)="setValuesValidator()"
+                 clValidatorErrors
+                 [showValidatorErrors]="formGroup.controls['type'].touched && !!formGroup.controls['type'].errors"/>
+    </div>
+
+    <!-- active/ inactive -->
+    <div class="col s12 l4 cl-form-field">
+      <label class="cl-input-label cl-required">{{ 'active-inactive' | translate }}</label>
+      <cl-input-switch styleClasses="top-margin" formControlName="isActive" />
+    </div>
+  </div>
+
+  <!-- description -->
+  <div class="row no-bottom-margin">
+    <div class="col s12 cl-form-field">
+      <label class="cl-input-label">{{  'description' | translate }}</label>
+      <cl-text-area
+        formControlName="description"
+        [maxLength]="500"
+        [showLength]="true"
+        [placeholder]="'description' | translate"
+        clValidatorErrors
+        [showValidatorErrors]="formGroup.controls['description'].touched && !!formGroup.controls['description'].errors"/>
+    </div>
+  </div>
+
+  <div class="row no-bottom-margin">
+    <div class="col s12 cl-form-field">
+      <label class="cl-input-label" [ngClass]="{'cl-required': formGroup.controls['type'].value == goodsFeatureTypeEnum.LIST}">{{  'value' | translate }}</label>
+      <cl-chips [placeholder]="'messages.pressEnter' | translate"
+                formControlName="values"
+                [allowDuplicate]="true"
+                clValidatorErrors
+                [showValidatorErrors]="formGroup.controls['values'].touched && !!formGroup.controls['values'].errors"/>
+    </div>
+  </div>
+
+</section>

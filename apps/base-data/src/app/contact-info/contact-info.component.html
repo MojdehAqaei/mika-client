@@ -1,0 +1,75 @@
+<section [formGroup]="formGroup">
+  <!-- set as default -->
+  <div class="row top-margin">
+    <div class="col s12 cl-form-field">
+      <label class="cl-input-label">{{ 'setAsDefault' | translate}}</label>
+      <cl-input-switch formControlName="isDefault"/>
+    </div>
+  </div>
+
+  <div class="row no-bottom-margin">
+    <!-- contact title -->
+    <div class="col s12 l4 cl-form-field">
+      <label class="cl-input-label cl-required">{{ 'base-data.person-company.contact-title' | translate }}</label>
+      <cl-input-text formControlName="title"
+                     clValidatorErrors
+                     [showValidatorErrors]="formGroup.controls['title'].touched && !!formGroup.controls['title'].errors"/>
+    </div>
+
+    <!-- contact type -->
+    <div class="col s12 l4 cl-form-field">
+      <label class="cl-input-label cl-required">{{ 'base-data.person-company.contact-type' | translate }}</label>
+      <cl-select formControlName="typeId"
+                 [filterable]="false"
+                 [options]="personCompanyFacade.personCompanyStore.state$().contactInfoTypes$()"
+                 optionValue="id"
+                 (onSelect)="setContactTypeTitle($event)"
+                 clValidatorErrors
+                 [showValidatorErrors]="formGroup.controls['typeId'].touched && !!formGroup.controls['typeId'].errors"/>
+    </div>
+
+    <!-- phone number -->
+    <div class="col s12 l4 cl-form-field">
+    <label class="cl-input-label cl-required">{{ 'base-data.person-company.phone-number' | translate }}</label>
+      <cl-input-text formControlName="phoneNumber"
+                     clKeyFilter="num"
+                     clValidatorErrors
+                     [showValidatorErrors]="formGroup.controls['phoneNumber'].touched && !!formGroup.controls['phoneNumber'].errors"/>
+    </div>
+  </div>
+
+  <!-- description -->
+  <div class="row no-bottom-margin">
+    <div class="col s12 cl-form-field">
+      <label class="cl-input-label">{{ 'description' | translate }}</label>
+      <cl-text-area formControlName="description"
+                    [maxLength]="200"
+                    [showLength]="true"
+                    [placeholder]="'description' | translate"
+                    clValidatorErrors
+                    [showValidatorErrors]="formGroup.controls['description'].touched && !!formGroup.controls['description'].errors"/>
+    </div>
+  </div>
+
+  <div class="row left-align">
+    <div class="col s12">
+      <cl-button [label]="contactAdd.label"
+                 [disabled]="contactAdd.disabled!"
+                 [loading]="contactAdd.loading!"
+                 [outlined]="contactAdd.outlined!"
+                 [icon]="contactAdd.icon"
+                 [iconPosition]="contactAdd.iconPosition"
+                 [size]="contactAdd.size"
+                 [styleClasses]="contactAdd.styleClass"
+                 [type]="contactAdd.type"
+                 (onClick)="addContactToList()"/>
+    </div>
+  </div>
+</section>
+
+<cl-divider/>
+
+<view-heading [icon]="'contact_phone'" [title]="'base-data.person-company.contact-info-list' | translate" />
+<cl-data-table [value]="list.value"
+               dataKey="phoneNumber"
+               [cols]="cols"/>

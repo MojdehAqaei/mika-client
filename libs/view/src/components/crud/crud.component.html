@@ -1,0 +1,91 @@
+<!-- search filters -->
+@if (allowedActions?.includes('Read')) {
+  <cl-panel [header]="'search' | translate"
+            [icon]="'search'"
+            styleClasses="bottom-margin">
+
+    <ng-template clTemplate="header">
+      <!-- add button -->
+      @if (allowedActions?.includes('Create')) {
+        <div class="left-align">
+          <cl-button [label]="addButton.label"
+                     [disabled]="addButton.disabled!"
+                     [loading]="addButton.loading!"
+                     [outlined]="addButton.outlined!"
+                     [icon]="addButton.icon"
+                     [iconPosition]="addButton.iconPosition"
+                     [size]="addButton.size"
+                     [styleClasses]="addButton.styleClass!"
+                     [type]="addButton.type"
+                     (onClick)="addButton.command ? addButton.command($event) : null"/>
+        </div>
+      }
+    </ng-template>
+
+    <view-search-filters [searchFormSchema]="searchFilters"
+                         [submitted]="submitted"
+                         [lazyValidation]="true"
+                         (search)="searchValue = $event.getRawValue(); search.emit($event.getRawValue())"
+                         (clear)="clear.emit()"/>
+
+  </cl-panel>
+}
+
+
+<view-content-wrapper [metaData]="metaData"
+                      [headerButtons]="headerActions"
+                      [toggleDrawer]="toggleDrawer">
+  <div drawer>
+    <ng-container [ngTemplateOutlet]="drawer"/>
+  </div>
+
+  <div content-body>
+    <!-- search filter labels -->
+    <div class="filter-labels-wrapper top-margin right-align">
+      @for (label of filtersLabels; track label) {
+        <span class="filter-label display-inline-block border-radius bottom-margin pink lighten-5 pink-text text-darken-2 padding small-font">
+          <i class="material-icons tiny vertical-align-middle">tune</i>
+          {{ label }}
+        </span>&nbsp;
+      }
+    </div>
+
+    <cl-data-table [value]="data"
+                   [cols]="cols"
+                   [totalRecords]="totalRecords"
+                   [actions]="tableActions"
+                   [hasPaginator]="showPaginator"
+                   [actionsBtnIcon]="'more_vert'"
+                   [isLazy]="true"
+                   [first]="first"
+                   [rows]="rows"
+                   [rowExpand]="hasRowExpansion"
+                   (onRowExpand)="rowExpand.emit($event)"
+                   (onActionClick)="tableRowAction.emit($event)"
+                   (onPage)="paginate($event)">
+      @if (hasRowExpansion) {
+        <ng-template clTemplate="rowexpansion" let-data="data">
+          <ng-container [ngTemplateOutlet]="tableRowExpansion" [ngTemplateOutletContext]="{data: data}"/>
+        </ng-template>
+      }
+    </cl-data-table>
+  </div>
+</view-content-wrapper>
+
+
+
+<!-- add/edit dialog -->
+<view-dialog [header]="dialogHeader"
+             [visible]="dialogVisible()"
+             [editMode]="editMode"
+             [hasFooter]="hasDialogFooter()"
+             [loading]="dialogLoading"
+             [width]="dialogWidth"
+             [minHeight]="dialogMinHeight"
+             (actionCall)="saveOrUpdate.emit()"
+             (dismiss)="dismiss.emit()">
+
+  <div dialog-content>
+    <ng-container [ngTemplateOutlet]="addEditDialog"/>
+  </div>
+</view-dialog>

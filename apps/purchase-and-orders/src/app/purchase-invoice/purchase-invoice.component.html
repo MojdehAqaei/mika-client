@@ -1,0 +1,58 @@
+<view-crud
+  [metaData]="appFacade.appStore.state$().pageMetadata$()"
+  [data]="
+    purchaseInvoiceFacade.purchaseInvoiceStore.state$().purchaseInvoiceList$()
+  "
+  [cols]="cols"
+  [tableActions]="actions"
+  [allowedActions]="
+    purchaseInvoiceFacade.purchaseInvoiceStore.state$().allowedActions$()
+  "
+  [filtersLabels]="
+    purchaseInvoiceFacade.purchaseInvoiceStore.state$().searchFilterLabels$()
+  "
+  [hasRowExpansion]="true"
+  [hasDialogFooter]="false"
+  [dialogWidth]="'95vw'"
+  [searchFilters]="searchFilters"
+  [toggleDrawer]="toggleDrawer"
+  [showPaginator]="showPaginator$()"
+  [editMode]="purchaseInvoiceFacade.purchaseInvoiceStore.state$().editMode$()"
+  [dialogHeader]="
+    purchaseInvoiceFacade.purchaseInvoiceStore.state$().editMode$()
+      ? ('purchase-and-orders.invoice.edit' | translate)
+      : ('purchase-and-orders.invoice.add' | translate)
+  "
+  [searchFilters]="searchFilters"
+  [toggleDrawer]="toggleDrawer"
+  (add)="setEditMode()"
+  [dialogLoading]="
+    purchaseInvoiceFacade.purchaseInvoiceStore.state$().dialogLoading$()
+  "
+  [dialogVisible]="
+    purchaseInvoiceFacade.purchaseInvoiceStore.state$().dialogVisible$()
+  "
+  [totalRecords]="purchaseInvoiceFacade.purchaseInvoiceStore.state$().total$()"
+  [first]="first$()"
+  [rows]="purchaseInvoiceFacade.purchaseInvoiceStore.state$().pageSize$()"
+  (add)="setEditMode()"
+  (page)="page($event)"
+  (saveOrUpdate)="saveOrUpdatePurchaseInvoice()"
+  (dismiss)="resetForm()"
+  (search)="filterPurchaseInvoice($event)"
+  (clear)="clearFilters()"
+  (rowExpand)="getItemsList($event)"
+>
+  <ng-template #tableRowExpansion let-data="data">
+    <purchase-purchase-invoice-item-list
+      class="table-expanded-items"
+      [items]="data.invoiceDetail.invoiceItemList"
+    />
+  </ng-template>
+  <ng-template #addEditDialog>
+    <purchase-add-edit-purchase-invoice
+      [activeIndex]="contentDialogActiveIndex"
+      (stepChange)="contentDialogActiveIndex = $event"
+    ></purchase-add-edit-purchase-invoice>
+  </ng-template>
+</view-crud>

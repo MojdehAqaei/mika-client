@@ -1,0 +1,52 @@
+@switch (view()) {
+  @case ('table') {
+    <cl-data-table [value]="items()"
+                   [cols]="cols"
+                   [hasPaginator]="false"/>
+
+  }
+
+  @case('simple') {
+    @for (item of items(); track item.id) {
+      <div class="transfer-and-receipt-item-wrapper">
+        <!-- goods code -->
+        <div class="transfer-and-receipt-item-inner">
+          <strong>{{'base-data.goods.code' | translate}}: </strong>
+          <span>{{ item | ClObjectToString:'goodsCode' || '-'}}</span>
+        </div>
+
+        <!-- goode label -->
+        <div class="transfer-and-receipt-item-inner">
+          <strong>{{'base-data.goods.' | translate}}: </strong>
+          <span>{{ item | ClObjectToString:'goodsLabel' || '-'}}</span>
+        </div>
+
+        <!-- counting unit title -->
+        <div class="transfer-and-receipt-item-inner">
+          <strong>{{'base-data.counting-unit.type' | translate}}: </strong>
+          <span>{{ item | ClObjectToString:'countingUnitTitle' || '-'}}</span>
+        </div>
+
+        <!-- quantity / value -->
+        <div class="transfer-and-receipt-item-inner">
+          <strong>{{('quantity' | translate) + ' / ' + ('value' | translate)}}: </strong>
+          <span>{{ item | ClObjectToString: 'quantity' || '-'}}</span>
+        </div>
+
+        <!-- description -->
+        <div class="transfer-and-receipt-item-inner">
+          <strong>{{'description' | translate}}: </strong>
+          <span>{{ item | ClObjectToString:'description' || '-'}}</span>
+        </div>
+      </div>
+    }
+
+    @if (!items() || !items().length) {
+      <div class="padding center-align">{{ 'messages.no-record' | translate }}</div>
+    }
+  }
+
+  @default {
+    <!---->
+  }
+}

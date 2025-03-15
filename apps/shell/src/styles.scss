@@ -1,0 +1,353 @@
+@use "../../../node_modules/@sadad/component-lib/src/styles/theme" with (
+$primary-color:#2563eb,
+$secondary-color: #2563eb,
+$help-color:#8787d5
+);
+
+
+@import "../../../node_modules/@sadad/component-lib/src/styles/partials/color-variables";
+
+$primary-color: #2563eb;
+$primary-color-light: lighten($primary-color, 10) !default;
+$primary-color-dark: darken($primary-color, 5%) !default;
+$secondary-color: #2563eb;
+$secondary-color-light: lighten($secondary-color, 10%) !default;
+$secondary-color-dark: darken($secondary-color, 5%) !default;
+$help-color: #8787d5;
+$help-color-light: lighten($help-color, 10%) !default;
+$help-color-dark: darken($help-color, 5%) !default;
+
+
+
+
+// text alignment
+
+.right-align {
+  text-align: right !important;
+}
+
+.left-align {
+  text-align: left !important;
+}
+
+.center-align {
+  text-align: center !important;
+}
+
+.vertical-align-middle {
+  vertical-align: middle;
+}
+
+// float
+.right {
+  float: right !important;
+}
+
+.clear-right {
+  clear: right !important;
+}
+
+.left {
+  float: left !important;
+}
+
+.clear-left {
+  clear: left !important;
+}
+
+.clear-both {
+  clear: both !important;
+}
+
+// cursor
+.move {
+   cursor: move !important;
+}
+
+.pointer {
+  cursor: pointer !important;
+}
+
+
+// padding
+.padding {
+  padding: 0.75rem;
+}
+
+.no-padding {
+  padding: 0 !important;
+}
+
+.no-right-padding {
+  padding-right: 0 !important;
+}
+
+.no-left-padding {
+   padding-left: 0 !important;
+}
+
+
+// margin
+.no-margin {
+  margin: 0 !important;
+}
+
+.no-top-margin {
+  margin-top: 0 !important;
+}
+
+.top-margin {
+  margin-top: 15px !important;
+}
+
+.no-bottom-margin {
+  margin-bottom: 0 !important;
+}
+
+.bottom-margin {
+  margin-bottom: 15px !important;
+}
+
+.right-margin {
+  margin-right: 10px !important;
+}
+
+.left-margin {
+  margin-left: 10px !important;
+}
+
+// font size
+.small-font {
+  font-size: 0.8rem;
+}
+
+.medium-font {
+  font-size: 1rem;
+}
+
+.large-font {
+  font-size: 1.5rem;
+}
+
+// display
+.display-block {
+  display: block;
+}
+
+.display-inline-block {
+  display: inline-block;
+}
+
+// list style
+.no-list-style {
+  list-style: none !important;
+}
+
+// border-radius
+.border-radius {
+  border-radius: 4px;
+}
+
+// direction
+.ltr {
+  direction: ltr;
+}
+
+.rtl {
+  direction: rtl;
+}
+
+// display
+.show {
+  display: block;
+}
+
+.hide {
+  display: none;
+}
+
+// position
+@mixin position($vertical, $horizontal, $flex-grow) {
+  display: flex;
+  align-items: $vertical;
+  justify-content: $horizontal;
+  flex: $flex-grow;
+}
+
+.center-position {
+  @include position(center, center, 1);
+}
+
+
+// favorites
+.favorites {
+  padding: 20px 45px;
+  display: flex;
+  align-items: center;
+  flex-direction: row;
+
+  .cl-link {
+    display: inline-block;
+    margin-left: 48px;
+    > a {
+      color: #565656
+    }
+  }
+}
+
+//end of favorites
+
+
+//content-wrapper
+.content-wrapper {
+  $right: var(--right);
+  display: flex;
+  flex-direction: row;
+
+  &-inner {
+    display: flex;
+    flex-direction: column;
+  }
+
+  > cl-panel {
+    flex-grow: 1;
+
+    > .cl-panel.custom-panel {
+    }
+  }
+
+  .cl-drawer-wrapper {
+    .cl-drawer-inner {
+      position: absolute;
+      z-index: 100;
+    }
+
+    &.open {
+      .cl-drawer-inner {
+        right: 0 //20px;
+      }
+    }
+
+    &.close {
+      .cl-drawer-inner {
+        right: -500px // #{$right}px;
+      }
+    }
+  }
+
+  .drawer-toggle {
+    width: 20px;
+    position: relative;
+    z-index: 101;
+    border-left: solid 1px #d3cfcf;
+    background-color: $white_1_;
+
+    .toggle-button {
+      width: 20px;
+      height: 20px;
+      background-color: $white_1_;
+      display: inline-flex;
+      cursor: pointer;
+      border-radius: 50%;
+      align-items: center;
+      justify-content: center;
+      position: absolute;
+      top: calc(50% - 10px);
+      left: -11px;
+      color: $primary-color;
+      > .material-icons {
+        font-size: 2.5rem;
+      }
+    }
+  }
+}
+
+//end of content-wrapper
+
+
+//confirmation
+.cl-confirm-dialog {
+  .cl-dialog-reject.confirm-dialog-reject-button {
+    background-color: transparent;
+    border-color: $secondary-color;
+    color: $secondary-color;
+    &:enabled:hover {
+      background-color: transparent;
+      border-color: $secondary-color;
+      color: $secondary-color;
+    }
+  }
+
+  .cl-dialog-accept.confirm-dialog-accept-button {
+    background-color: $primary-color;
+    border-color: $primary-color;
+    &:enabled:hover {
+      background-color: $primary-color-dark;
+      border-color: $primary-color-dark;
+    }
+  }
+}
+
+//end of confirmation
+
+//dialog
+.cl-dialog-mask .cl-dialog .cl-dialog-content {
+  //overflow: unset;
+}
+//end of dialog
+
+
+//steps
+.cl-steps ul {
+  flex-wrap: wrap;
+}
+//end of steps
+
+
+//user logout
+.user-exit-btn.cl-button {
+  border: 0 !important;
+}
+
+//end of user logout
+
+// feature add button
+.add-button-wrapper {
+  margin-top: calc(15px + 0.5em);
+  .add-button {
+    width: 100%;
+  }
+}
+
+// end of feature add button
+
+
+// footer
+.cl-footer {
+  &-bottom {
+    background-color: #ffffff !important;
+  }
+}
+
+// end of footer
+
+// data table
+
+.table-expanded-items {
+  th, td {
+    background: map-get($blue, 'lighten-5') !important;
+  }
+}
+// end of data table
+
+// header
+.header-user-role-detail-dialog,
+.header-fiscal-year-dialog {
+  border: none;
+}
+
+// end of header
+
+.cl-select-label-container .cl-select-label.cl-placeholder {
+  color: initial;
+}

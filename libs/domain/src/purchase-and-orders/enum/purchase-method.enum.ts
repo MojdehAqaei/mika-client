@@ -1,0 +1,4 @@
+export enum PurchaseMethodEnum {
+  DIRECT_PURCHASE = 'DIRECT_PURCHASE',
+  PUBLIC_NOTICE = 'PUBLIC_NOTICE',
+}

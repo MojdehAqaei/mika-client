@@ -1,0 +1,111 @@
+{
+  "name": "stockroom",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "projectType": "application",
+  "prefix": "stockroom",
+  "sourceRoot": "apps/stockroom/src",
+  "tags": ["scope:data", "type:remote-app"],
+  "targets": {
+    "build": {
+      "executor": "@nx/angular:webpack-browser",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/apps/stockroom",
+        "index": "apps/stockroom/src/index.html",
+        "main": "apps/stockroom/src/main.ts",
+        "polyfills": ["zone.js"],
+        "tsConfig": "apps/stockroom/tsconfig.app.json",
+        "inlineStyleLanguage": "scss",
+        "assets": [
+          {
+            "glob": "**/*",
+            "input": "apps/stockroom/public"
+          }
+        ],
+        "styles": ["apps/stockroom/src/styles.scss"],
+        "scripts": [],
+        "customWebpackConfig": {
+          "path": "apps/stockroom/webpack.config.ts"
+        }
+      },
+      "configurations": {
+        "production": {
+          "budgets": [
+            {
+              "type": "initial",
+              "maximumWarning": "500kb",
+              "maximumError": "1mb"
+            },
+            {
+              "type": "anyComponentStyle",
+              "maximumWarning": "2kb",
+              "maximumError": "4kb"
+            }
+          ],
+          "outputHashing": "all",
+          "customWebpackConfig": {
+            "path": "apps/stockroom/webpack.prod.config.ts"
+          }
+        },
+        "development": {
+          "buildOptimizer": false,
+          "optimization": false,
+          "vendorChunk": true,
+          "extractLicenses": false,
+          "sourceMap": true,
+          "namedChunks": true
+        }
+      },
+      "defaultConfiguration": "production"
+    },
+    "serve": {
+      "executor": "@nx/angular:dev-server",
+      "options": {
+        "port": 2528,
+        "publicHost": "http://localhost:2528"
+      },
+      "configurations": {
+        "production": {
+          "buildTarget": "stockroom:build:production"
+        },
+        "development": {
+          "buildTarget": "stockroom:build:development"
+        }
+      },
+      "defaultConfiguration": "development"
+    },
+    "extract-i18n": {
+      "executor": "@angular-devkit/build-angular:extract-i18n",
+      "options": {
+        "buildTarget": "stockroom:build"
+      }
+    },
+    "lint": {
+      "executor": "@nx/eslint:lint"
+    },
+    "test": {
+      "executor": "@nx/jest:jest",
+      "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
+      "options": {
+        "jestConfig": "apps/stockroom/jest.config.ts"
+      }
+    },
+    "serve-static": {
+      "executor": "@nx/web:file-server",
+      "defaultConfiguration": "production",
+      "options": {
+        "buildTarget": "stockroom:build",
+        "port": 2528,
+        "watch": false
+      },
+      "configurations": {
+        "development": {
+          "buildTarget": "stockroom:build:development"
+        },
+        "production": {
+          "buildTarget": "stockroom:build:production"
+        }
+      }
+    }
+  }
+}

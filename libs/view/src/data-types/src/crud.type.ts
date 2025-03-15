@@ -1,0 +1,30 @@
+export type Crud =
+  'Create' |
+  'Read' |
+  'Update' |
+  'Delete' |
+  'InventoryCountIssuance' |
+  'InventoryCountStart' |
+  'BeginningPeriodDocIssuance' |
+  'CorrectivDocIssuance' |
+  'Cancel' |
+  'DeliveryConfirmation' |
+  'ReceiverConfirmation' |
+  'Finalize' |
+  'InvntoryPeriodEnding' |
+  'FiscalPeriodEnding' |
+  'Inactivity' |
+  'Realization' |
+  'VoucherIssuance' |
+  'OrderComplete' |
+  'PriceEstimateConfirmation' |
+  'BudgetConfirmation' |
+  'PaymentConfirmation' |
+  'TransferConfirmation' |
+  'PurchaseComplete' |
+  'PriceEstimate' |
+  'PurchaseReferenceAddSteps' |
+  'InformaticSerial' |
+  'ExportExcel' |
+  'ExportExcelwithSerial' |
+  'ExportPDF';

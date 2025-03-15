@@ -1,0 +1,147 @@
+<view-heading [title]="'base-data.goods.save' | translate" [icon]="'box_add'" styleClasses="no-top-margin"/>
+<!-- save goods -->
+<section [formGroup]="formGroup">
+  <div class="row">
+    <!-- goods -->
+    <div class="col s12 l4">
+      <label class="cl-input-label cl-required">{{ 'base-data.goods.' | translate }}</label>
+      <cl-select formControlName="goodsId"
+                 url="goods-services/search/actives"
+                 [placeholder]="'select' | translate"
+                 [filterable]="true"
+                 [lazyFilter]="true"
+                 [httpContext]="httpContext"
+                 [optionLabel]="['title', 'code']"
+                 optionValue="id"
+                 (onSelect)="setSelectedGoods($event)"
+                 clValidatorErrors
+                 [showValidatorErrors]="formGroup.controls['goodsId'].touched && !!formGroup.controls['goodsId'].errors"/>
+    </div>
+
+    <!-- counting unit -->
+    <div class="col s12 l4">
+      <label class="cl-input-label">{{ 'base-data.counting-unit.type' | translate }}</label>
+      <cl-input-text formControlName="countingUnitTitle"/>
+    </div>
+
+    <!-- quantity / value -->
+    <div class="col s12 l4">
+      <label class="cl-input-label cl-required">{{ ('quantity' | translate) + ' / ' + ('value' | translate) }}</label>
+      <cl-input-number placeholder="..."
+                       formControlName="quantity"
+                       [maxFractionDigits]="formGroup.controls['isGoodsFloat'].value ? 2 : 0"
+                       (onInputChange)="setTotalPrice()"
+                       clValidatorErrors
+                       [showValidatorErrors]="formGroup.controls['quantity'].touched && !!formGroup.controls['quantity'].errors"/>
+    </div>
+  </div>
+
+  <div class="row">
+    <!-- unit price -->
+    <div class="col s12 l4">
+      <label class="cl-input-label">{{ 'unit-price' | translate }}</label>
+      <cl-input-number placeholder="..."
+                       formControlName="price"
+                       [useGrouping]="true"
+                       [suffix]="'currency.rial' | translate"
+                       (onInputChange)="setTotalPrice()"
+                       clValidatorErrors
+                       [showValidatorErrors]="formGroup.controls['price'].touched && !!formGroup.controls['price'].errors"/>
+    </div>
+
+    <!-- total price -->
+    <div class="col s12 l4">
+      <label class="cl-input-label">{{ 'total-price' | translate }}</label>
+      <cl-input-number formControlName="totalPrice"
+                       [useGrouping]="true"
+                       [suffix]="'currency.rial' | translate"/>
+    </div>
+  </div>
+
+  <!-- description -->
+  <div class="row">
+    <div class="col s12">
+      <label class="cl-input-label">{{  'description' | translate }}</label>
+      <cl-text-area formControlName="description"
+                    [maxLength]="500"
+                    [showLength]="true"
+                    [placeholder]="'description' | translate"
+                    clValidatorErrors
+                    [showValidatorErrors]="formGroup.controls['description'].touched && !!formGroup.controls['description'].errors"/>
+    </div>
+  </div>
+
+  @if (formGroup.controls['serialType'].value == 'INFORMATICS_SERIES') {
+    <div class="row">
+      <div class="col s12">
+        <label class="cl-input-label">{{  'base-data.goods.serial-number' | translate }}</label>
+        @switch (goodsDeliveryFacade.goodsDeliveryStore.state$().selectedGoodsDelivery$().deliveryType) {
+          @case (goodsDeliveryTypeEnum.PURCHASE_AND_DELIVERY_TO_ORGANIZATION) {
+            <cl-chips [placeholder]="'messages.pressEnter' | translate"
+                      formControlName="serialNumbers"
+                      [allowDuplicate]="false"
+                      [maxLength]="formGroup.controls['quantity'].value"
+                      [showLength]="true"
+                      clValidatorErrors
+                      [showValidatorErrors]="formGroup.controls['serialNumbers'].touched && !!formGroup.controls['serialNumbers'].errors"/>
+          }
+
+          @case (goodsDeliveryTypeEnum.PURCHASE_AND_DELIVERY_TO_INVENTORY) {
+            <cl-chips [placeholder]="'messages.pressEnter' | translate"
+                      formControlName="serialNumbers"
+                      [allowDuplicate]="false"
+                      [maxLength]="formGroup.controls['quantity'].value"
+                      [showLength]="true"
+                      clValidatorErrors
+                      [showValidatorErrors]="formGroup.controls['serialNumbers'].touched && !!formGroup.controls['serialNumbers'].errors"/>
+          }
+
+          <!-- --------------------------------
+            for these types:
+              RETURN_PURCHASE_OF_ORGANIZATION
+              RETURN_PURCHASE_OF_INVENTORY
+              DELIVERY_FROM_INVENTORY_TO_ORGANIZATION
+              RETURN_FROM_ORGANIZATION_TO_INVENTORY
+              TRANSFER_FROM_INVENTORY_TO_INVENTORY
+             ------------------------------------- -->
+          @default {
+            <cl-list-box [data]="goodsDeliveryFacade.goodsDeliveryStore.state$().informaticsSerialNumbers$()"
+                         [selectable]="true"
+                         [multiple]="true"
+                         optionValue="value"
+                         optionLabel="name"
+                         formControlName="availableSerialNumbers"/>
+          }
+        }
+
+      </div>
+    </div>
+  }
+
+  <!-- add button -->
+  <div class="row left-align">
+    <div class="col s12">
+      <cl-button [label]="goodsAdd.label"
+                 [disabled]="goodsAdd.disabled!"
+                 [loading]="goodsAdd.loading!"
+                 [outlined]="goodsAdd.outlined!"
+                 [icon]="goodsAdd.icon"
+                 [iconPosition]="goodsAdd.iconPosition"
+                 [size]="goodsAdd.size"
+                 [styleClasses]="goodsAdd.styleClass"
+                 [type]="goodsAdd.type"
+                 (onClick)="addGoodsToList()"/>
+    </div>
+  </div>
+</section>
+
+<cl-divider/>
+
+
+<view-heading [title]="'base-data.goods.saved-list' | translate" [icon]="'box'" styleClasses="no-margin"/>
+<!-- goods list-->
+<section class="bottom-margin">
+  <purchase-goods-delivery-item-list [items]="goodsDeliveryFacade.goodsDeliveryStore.state$().selectedGoodsDelivery$().deliveryItemsList || []"
+                                     [canEditSerialNumbers]="true"
+                                     [canDelete]="true"/>
+</section>

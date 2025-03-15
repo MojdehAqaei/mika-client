@@ -1,0 +1,85 @@
+<section [formGroup]="formGroup">
+  <div class="row no-bottom-margin">
+    <!-- code -->
+    <div class="col s12 m6 l4 cl-form-field">
+      <label class="cl-input-label cl-required">{{ 'stockroom.inventory-type.code' | translate }}</label>
+      <cl-input-text placeholder="..."
+                     formControlName="code"
+                     clKeyFilter="num"
+                     clValidatorErrors
+                     [showValidatorErrors]="formGroup.controls['code'].touched && !!formGroup.controls['code'].errors"/>
+    </div>
+
+    <!-- title -->
+    <div class="col s12 m6 l4 cl-form-field">
+      <label class="cl-input-label cl-required">{{ 'stockroom.inventory-type.title' | translate }}</label>
+      <cl-input-text placeholder="..."
+                     formControlName="title"
+                     clValidatorErrors
+                     [maxLength]="20"
+                     [showValidatorErrors]="formGroup.controls['title'].touched && !!formGroup.controls['title'].errors"/>
+    </div>
+
+    <!-- active/ inactive -->
+    <div class="col s12 m6 l4 cl-form-field">
+      <label class="cl-input-label cl-required">{{ 'stockroom.inventory-type.status' | translate }}</label>
+      <cl-input-switch styleClasses="top-margin" formControlName="isActive" />
+    </div>
+  </div>
+
+  <!-- description -->
+  <div class="row">
+    <div class="col s12 cl-form-field">
+      <label class="cl-input-label">{{ 'stockroom.inventory-type.description' | translate }}</label>
+      <cl-text-area placeholder="..."
+                    formControlName="description"
+                    clValidatorErrors
+                    [showValidatorErrors]="formGroup.controls['description'].touched && !!formGroup.controls['description'].errors"/>
+    </div>
+  </div>
+
+  <cl-divider/>
+
+  <!-- goods group -->
+  <view-heading [title]="'base-data.related-goods-group' | translate" [icon]="'view_in_ar'"/>
+  <div class="row">
+    <div class="col s12 m9">
+      <label class="cl-input-label">{{ 'base-data.goods-group' | translate }}</label>
+      <cl-select formControlName="selectedGoodsGroup"
+                 url="goods-service-categories/search/actives"
+                 [placeholder]="'select' | translate"
+                 [filterable]="true"
+                 [lazyFilter]="true"
+                 [optionLabel]="['title', 'code']"
+                 [httpContext]="httpContext"
+                 clValidatorErrors
+                 [showValidatorErrors]="formGroup.controls['selectedGoodsGroup'].touched && !!formGroup.controls['selectedGoodsGroup'].errors"/>
+    </div>
+
+    <!-- add button -->
+    <div class="col s12 m3 add-button-wrapper">
+      <cl-button [label]="add.label"
+                 [disabled]="add.disabled!"
+                 [loading]="add.loading!"
+                 [outlined]="add.outlined!"
+                 [icon]="add.icon"
+                 [iconPosition]="add.iconPosition"
+                 [size]="add.size"
+                 [styleClasses]="add.styleClass"
+                 [type]="add.type"
+                 (onClick)="addRemoveGoodsGroupToTheList(formGroup.controls['selectedGoodsGroup'].value, 'add')"/>
+    </div>
+  </div>
+
+  <!-- added goods groups list -->
+  <div class="row">
+    <div class="col s12">
+      <cl-data-table [value]="relatedGoodsGroupList"
+                     [cols]="goodsGroupCols"
+                     [rows]="5"
+                     [totalRecords]="relatedGoodsGroupList.length || 0"
+                     dataKey="id"
+                     [hasPaginator]="true"/>
+    </div>
+  </div>
+</section>

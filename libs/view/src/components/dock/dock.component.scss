@@ -1,0 +1,24 @@
+.dock {
+  $height: var(--height);
+  position: fixed;
+  top: calc((100vh - $height) / 2);
+  left: 5px;
+  z-index: 1000;
+  background-color: rgba(18, 69, 89, 0.7);
+  border-radius: 4px;
+  padding: 15px;
+  &-item {
+    cursor: pointer;
+    margin-bottom: 8px;
+    &:last-child {
+      margin-bottom: 0;
+    }
+    &:hover {
+      text-shadow: 0 0 15px #ffffff;
+    }
+    color: white;
+    .icon {
+      vertical-align: middle;
+    }
+  }
+}

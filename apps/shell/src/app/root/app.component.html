@@ -1,0 +1,54 @@
+@defer (on immediate) {
+
+  <cl-loading mode="indeterminate" styleClass="loading-wrapper"/>
+
+  @if(appFacade.appStore.state$().loggedInUser$()?.isUSerActive) {
+<!--    <view-dock [items]="dockItems"/>-->
+
+    <div class="app" id="app"> <!-- <===== do not change this / used in fitToContent-->
+
+
+      <!-- do not change the id / used in fitToContent-->
+      <div id="main-content"
+           class="content"
+           [ngClass]="{'has-drawer' : appFacade.appStore.state$().pageMetadata$().hasDrawer}">
+
+        <!-- do not change the id / used in fitToContent-->
+        <view-layout id="view-layout"
+                     [user]="appFacade.appStore.state$().loggedInUser$()"
+                     [isMenuExpandedOnPageLoad]="appFacade.appStore.state$().pageMetadata$().isMenuExpanded ?? true"
+                     [fiscalPeriod]="appFacade.appStore.state$().activeFiscalPeriod$()"
+                     [selectedUserRoles]="appFacade.appStore.state$().loggedInUserRoles$()"
+                     [selectableFiscalPeriods]="appFacade.appStore.state$().fiscalPeriodsList$()"
+                     [showBreadcrumb]="showBreadcrumb"
+                     [menu]="appFacade.appStore.state$().menuItems$()"
+                     (logout)="logout()"
+                     (changeActiveFiscalPeriod)="changeActiveFiscalYear($event)"
+                     (changeUserRole)="changeUserRole($event)">
+          <router-outlet/>
+        </view-layout>
+      </div>
+    </div>
+
+    <div class="user-inactivity" clUserInactivity [timeSpan]="120 * 60 * 1000" (onInactivate)="setIdle()" [hidden]="true">
+      <div class="user-inactivity-text">{{ 'messages.user-inactivity' | translate:{value: 120} }}</div>
+    </div>
+
+    <cl-scroll-top-bottom/>
+  } @else {
+    <view-page type="access denied"/>
+  }
+}
+@loading {
+  <view-page type="loading"/>
+} @error {
+  <view-page type="error"/>
+} @placeholder {
+  <view-page type="loading"/> <!-- type 'empty' can also be used -->
+}
+
+
+
+
+
+

@@ -1,0 +1,26 @@
+  <view-crud [metaData]="appFacade.appStore.state$().pageMetadata$()"
+             [data]="featureFacade.featureStore.state$().features$()"
+             [cols]="cols"
+             [tableActions]="actions"
+             [allowedActions]="featureFacade.featureStore.state$().allowedActions$()"
+             [searchFilters]="searchFilters"
+             [filtersLabels]="featureFacade.featureStore.state$().searchFilterLabels$()"
+             [toggleDrawer]="toggleDrawer"
+             [showPaginator]="showPaginator$()"
+             [editMode]="featureFacade.featureStore.state$().editMode$()"
+             [dialogVisible]="featureFacade.featureStore.state$().dialogVisible$()"
+             [dialogHeader]="featureFacade.featureStore.state$().editMode$() ? ('base-data.set-feature.edit' | translate) : ('base-data.set-feature.add' | translate)"
+             [dialogLoading]="featureFacade.featureStore.state$().dialogLoading$()"
+             [totalRecords]="featureFacade.featureStore.state$().total$()"
+             [first]="first$()"
+             [rows]="featureFacade.featureStore.state$().pageSize$()"
+             (page)="page($event)"
+             (add)="setEditMode()"
+             (saveOrUpdate)="saveOrUpdateGoodsFeature()"
+             (dismiss)="resetForm()"
+             (search)="filterGoodsFeatures($event)"
+             (clear)="clearFilters()">
+  <ng-template #addEditDialog>
+    <base-add-edit-feature />
+  </ng-template>
+</view-crud>

@@ -1,0 +1,43 @@
+<view-crud [metaData]="appFacade.appStore.state$().pageMetadata$()"
+           [data]="warehousingFacade.warehousingStore.state$().warehousingList$()"
+           [cols]="cols"
+           [tableActions]="actions"
+           [allowedActions]="warehousingFacade.warehousingStore.state$().allowedActions$()"
+           [searchFilters]="searchFilters"
+           [filtersLabels]="warehousingFacade.warehousingStore.state$().searchFilterLabels$()"
+           [toggleDrawer]="toggleDrawer"
+           [showPaginator]="showPaginator$()"
+           [editMode]="warehousingFacade.warehousingStore.state$().editMode$()"
+           [dialogHeader]="actionTitle()"
+           [dialogLoading]="warehousingFacade.warehousingStore.state$().dialogLoading$()"
+           [dialogVisible]="warehousingFacade.warehousingStore.state$().dialogVisible$()"
+           [totalRecords]="warehousingFacade.warehousingStore.state$().total$()"
+           [dialogWidth]="'85vw'"
+           [first]="first$()"
+           [rows]="warehousingFacade.warehousingStore.state$().pageSize$()"
+           (page)="page($event)"
+           (saveOrUpdate)="saveOrUpdateWarehousing()"
+           (dismiss)="resetForm()"
+           (search)="filterWarehousing($event)"
+           (clear)="clearFilters()"
+           (add)="seEditMode()">
+  <ng-template #addEditDialog>
+    @switch (actionsType()) {
+      @case ('Create') {
+        <stockroom-add-edit-warehousing/>
+      }
+
+      @case ('Update') {
+        <stockroom-add-edit-warehousing/>
+      }
+
+      @case ('InventoryCountIssuance') {
+        <stockroom-warehousing-count-round/>
+      }
+
+      @default {
+        <!---->
+      }
+    }
+  </ng-template>
+</view-crud>

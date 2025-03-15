@@ -1,0 +1,28 @@
+<view-crud [metaData]="appFacade.appStore.state$().pageMetadata$()"
+           [data]="userRolesFacade.userRolesStore.state$().userRoles$()"
+           [cols]="cols"
+           [tableActions]="actions"
+           [allowedActions]="userRolesFacade.userRolesStore.state$().allowedActions$()"
+           [searchFilters]="searchFilters"
+           [filtersLabels]="userRolesFacade.userRolesStore.state$().searchFilterLabels$()"
+           [toggleDrawer]="toggleDrawer"
+           [hasDialogFooter]="false"
+           [showPaginator]="showPaginator$()"
+           [editMode]="userRolesFacade.userRolesStore.state$().editMode$()"
+           [dialogHeader]="userRolesFacade.userRolesStore.state$().editMode$() ? ('user-management.edit-permission-assign' | translate) : ('user-management.permission-assign.' | translate)"
+           [dialogLoading]="userRolesFacade.userRolesStore.state$().dialogLoading$()"
+           [dialogVisible]="userRolesFacade.userRolesStore.state$().dialogVisible$()"
+           [totalRecords]="userRolesFacade.userRolesStore.state$().total$()"
+           [first]="first$()"
+           [rows]="userRolesFacade.userRolesStore.state$().pageSize$()"
+           [dialogWidth]="'95vw'"
+           (page)="page($event)"
+           (add)="setEditMode()"
+           (saveOrUpdate)="saveOrUpdateUserRoles()"
+           (dismiss)="resetForm()"
+           (search)="filterUserRoles($event)"
+           (clear)="clearFilters()">
+  <ng-template #addEditDialog>
+    <user-content-access [activeIndex]="contentDialogActiveIndex" (stepChange)="contentDialogActiveIndex = $event"/>
+  </ng-template>
+</view-crud>

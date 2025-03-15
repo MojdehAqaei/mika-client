@@ -1,0 +1,496 @@
+{
+  "1": [
+    {
+      "label": "مطبوعات عادی",
+      "icon": "folder",
+      "data": "Pacino Movies",
+      "children": [],
+      "id": "e67a"
+    },
+    {
+      "label": "اداری",
+      "data": "De Niro Movies",
+      "icon": "folder",
+      "children": [
+        {
+          "label": "مطبوعات عادی",
+          "data": "Pacino Movies",
+          "children": [
+            {
+              "label": "فرمهای عادی",
+              "data": "Pacino Movies",
+              "children": []
+            },
+            {
+              "label": "متفرقه",
+              "data": "Pacino Movies",
+              "children": []
+            },
+            {
+              "label": "فرمهای ممیزدار",
+              "data": "Pacino Movies",
+              "children": []
+            },
+            {
+              "label": "دفاتر",
+              "data": "Pacino Movies",
+              "children": []
+            },
+            {
+              "label": "زیرگروه مطبوعات عادی تست",
+              "data": "Pacino Movies",
+              "children": []
+            }
+          ]
+        }
+      ],
+      "id": "e49e"
+    }
+  ],
+  "users-test": [
+    {
+      "id": "1",
+      "fName": "تست",
+      "lastName": "یک",
+      "status": true,
+      "nationalCode": "1234567890",
+      "organization": {
+        "id": "0909",
+        "name": "واحد 24"
+      },
+      "permissions": [
+        {
+          "name": "دسترسی یک",
+          "parent": "INVENTORY_MANAGEMENT"
+        },
+        {
+          "name": "دسترسی دو",
+          "parent": "INVENTORY_MANAGEMENT"
+        },
+        {
+          "name": "دسترسی سه",
+          "parent": "INVENTORY_MANAGEMENT"
+        }
+      ]
+    },
+    {
+      "id": "2",
+      "fName": "تست",
+      "lastName": "دو",
+      "active": true,
+      "nationalCode": "1234656800",
+      "organization": {
+        "id": "0909",
+        "name": "واحد 24"
+      },
+      "permissions": [
+        {
+          "name": "دسترسی دو"
+        }
+      ]
+    },
+    {
+      "id": "3",
+      "fName": "تست",
+      "lastName": "سه",
+      "active": false,
+      "nationalCode": "1134569990",
+      "organization": {
+        "id": "0910",
+        "name": "واحد 89"
+      },
+      "permissions": [
+        {
+          "name": "دسترسی یک"
+        }
+      ]
+    },
+    {
+      "id": "4",
+      "fName": "تست",
+      "lastName": "چهار",
+      "active": true,
+      "nationalCode": "1233307809",
+      "organization": {
+        "id": "0911",
+        "name": "واحد 67"
+      },
+      "permissions": [
+        {
+          "name": "دسترسی یک"
+        },
+        {
+          "name": "دسترسی دو"
+        }
+      ]
+    }
+  ],
+  "roles": [
+    {
+      "id": "11",
+      "name": "مدیر",
+      "permissions": [
+        {
+          "id": "522",
+          "name": "نمایش مدیریت رسید انبار",
+          "children": [
+            {
+              "id": "523",
+              "name": "افزودن رسید انبار"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "12",
+      "name": "انباردار",
+      "permissions": [
+        {
+          "id": "532",
+          "name": "گزارش موجوی انبار"
+        }
+      ]
+    },
+    {
+      "id": "13",
+      "name": "رئیس انبار",
+      "permissions": []
+    }
+  ],
+  "permissions": [
+    {
+      "id": "522",
+      "name": "نمایش مدیریت رسید انبار",
+      "children": [
+        {
+          "id": "523",
+          "name": "افزودن رسید انبار"
+        },
+        {
+          "id": "524",
+          "name": "ویرایش رسید انبار"
+        },
+        {
+          "id": "525",
+          "name": "حذف رسید انبار"
+        }
+      ]
+    },
+    {
+      "id": "532",
+      "name": "گزارش موجوی انبار"
+    },
+    {
+      "id": "542",
+      "name": "نمایش مدیریت انبار",
+      "children": [
+        {
+          "id": "543",
+          "name": "افزودن انبار"
+        }
+      ]
+    }
+  ],
+  "user-roles": [
+    {
+      "id": "1234560",
+      "user": {
+        "id": "1",
+        "fName": "تست",
+        "lastName": "یک",
+        "nationalCode": "1234567890"
+      },
+      "role": {
+        "id": "12",
+        "name": "انباردار"
+      },
+      "date": "1403/01/01",
+      "status": "IN_ACTIVE"
+    },
+    {
+      "id": "1234880",
+      "user": {
+        "id": "2",
+        "fName": "تست",
+        "lastName": "دو",
+        "nationalCode": "1234656800"
+      },
+      "role": {
+        "id": "11",
+        "name": "مدیر"
+      },
+      "date": "1403/08/12",
+      "status": "ACTIVE"
+    }
+  ],
+  "organizations": [
+    {
+      "id": "0909",
+      "name": "واحد 24"
+    },
+    {
+      "id": "0910",
+      "name": "واحد 89"
+    },
+    {
+      "id": "0911",
+      "name": "واحد 67"
+    }
+  ],
+  "goodsGroup-level1": [
+    {
+      "id": "1",
+      "children": [
+        {
+          "id": 2,
+          "parentId": 1,
+          "children": [
+            {
+              "id": 2,
+              "parentId": 1,
+              "children": [],
+              "title": "کالا",
+              "code": "1",
+              "level": 1,
+              "status": 1,
+              "expandable": true,
+              "parentTitle": "کالا"
+            }
+          ],
+          "title": "کالا",
+          "code": "1",
+          "level": 1,
+          "status": 1,
+          "expandable": false,
+          "parentTitle": "Root",
+          "parentCode": "",
+          "description": "Test"
+        },
+        {
+          "id": 3,
+          "parentId": 1,
+          "children": [],
+          "title": "خدمات",
+          "code": "2",
+          "level": 1,
+          "status": 1,
+          "expandable": true,
+          "parentTitle": "Root",
+          "parentCode": "",
+          "description": "Test"
+        }
+      ],
+      "title": "Root",
+      "code": "",
+      "level": 0,
+      "status": 1,
+      "expandable": false,
+      "description": ""
+    }
+  ],
+  "setFeatureOptions": [
+    {
+      "label": "MOCK",
+      "value": "MOCK",
+      "id": "0cfe"
+    },
+    {
+      "label": "MOCK",
+      "value": "MOCK",
+      "id": "dd40"
+    },
+    {
+      "label": "MOCK",
+      "value": "MOCK",
+      "id": "0abc"
+    },
+    {
+      "label": "MOCK",
+      "value": "MOCK",
+      "id": "2255"
+    },
+    {
+      "label": "MOCK",
+      "value": "MOCK",
+      "id": "9c62"
+    },
+    {
+      "label": "MOCK",
+      "value": "MOCK",
+      "id": "986b"
+    }
+  ],
+  "countingUnitTypeList": [
+    {
+      "label": "type1",
+      "value": "type1",
+      "id": "cf72"
+    },
+    {
+      "label": "type2",
+      "value": "type2",
+      "id": "f096"
+    },
+    {
+      "label": "type3",
+      "value": "type3",
+      "id": "bd3e"
+    },
+    {
+      "label": "type4",
+      "value": "type4",
+      "id": "7b23"
+    },
+    {
+      "label": "type5",
+      "value": "type5",
+      "id": "3393"
+    }
+  ],
+  "countingTableData": [
+    {
+      "code": "feature",
+      "title": "title1",
+      "type": "type1",
+      "status": true,
+      "id": "bb8c"
+    },
+    {
+      "code": "feature",
+      "title": "title2",
+      "type": "type2",
+      "status": false,
+      "id": "84be"
+    },
+    {
+      "code": "feature",
+      "title": "title3",
+      "type": "type3",
+      "status": true,
+      "id": "353e"
+    },
+    {
+      "code": "feature",
+      "title": "title4",
+      "type": "type4",
+      "status": false,
+      "id": "af1f"
+    },
+    {
+      "code": "feature",
+      "title": "title5",
+      "type": "type5",
+      "status": true,
+      "id": "823f"
+    }
+  ],
+  "setFeatureTableData": [
+    {
+      "code": "feature",
+      "title": false,
+      "type": "value",
+      "status": true,
+      "description": "description",
+      "value": [
+        "chips1",
+        "chips2"
+      ],
+      "id": "01f2"
+    },
+    {
+      "code": "feature",
+      "title": false,
+      "type": "value",
+      "status": false,
+      "description": "description",
+      "value": [
+        "chips1",
+        "chips2"
+      ],
+      "id": "ea5e"
+    },
+    {
+      "code": "feature",
+      "title": false,
+      "type": "value",
+      "status": true,
+      "description": "description",
+      "value": [
+        "chips1",
+        "chips2"
+      ],
+      "id": "21ec"
+    },
+    {
+      "code": "feature",
+      "title": false,
+      "type": "value",
+      "status": false,
+      "description": "description",
+      "value": [
+        "chips1",
+        "chips2"
+      ],
+      "id": "461e"
+    },
+    {
+      "code": "feature",
+      "title": false,
+      "type": "value",
+      "status": true,
+      "description": "description",
+      "value": [
+        "chips1",
+        "chips2"
+      ],
+      "id": "6798"
+    }
+  ],
+  "goodsTable": [
+    {
+      "feature": "feature",
+      "isRequired": false,
+      "value": "value",
+      "description": "description",
+      "id": "1514"
+    },
+    {
+      "feature": "feature",
+      "isRequired": false,
+      "value": "value",
+      "description": "description",
+      "id": "f9de"
+    },
+    {
+      "feature": "feature",
+      "isRequired": false,
+      "value": "value",
+      "description": "description",
+      "id": "0b7f"
+    },
+    {
+      "feature": "feature",
+      "isRequired": false,
+      "value": "value",
+      "description": "description",
+      "id": "d777"
+    },
+    {
+      "feature": "feature",
+      "isRequired": false,
+      "value": "value",
+      "description": "description",
+      "id": "7188"
+    }
+  ],
+  "fiscal-years": [
+    {
+      "id": "e3d8",
+      "startDate": "2024-08-11T07:19:45.480Z",
+      "endDate": "2024-08-11T07:19:45.480Z",
+      "title": "دوره مالی ۱123123",
+      "description": ""
+    }
+  ]
+}

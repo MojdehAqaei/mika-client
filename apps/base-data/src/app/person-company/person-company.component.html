@@ -1,0 +1,28 @@
+<view-crud [metaData]="appFacade.appStore.state$().pageMetadata$()"
+           [data]="personCompanyFacade.personCompanyStore.state$().personCompanyList$()"
+           [cols]="cols"
+           [tableActions]="actions"
+           [allowedActions]="personCompanyFacade.personCompanyStore.state$().allowedActions$()"
+           [searchFilters]="searchFilters"
+           [filtersLabels]="personCompanyFacade.personCompanyStore.state$().searchFilterLabels$()"
+           [toggleDrawer]="toggleDrawer"
+           [dialogWidth]="'95vw'"
+           [showPaginator]="showPaginator$()"
+           [editMode]="personCompanyFacade.personCompanyStore.state$().editMode$()"
+           [dialogHeader]="personCompanyFacade.personCompanyStore.state$().editMode$() ? ('base-data.person-company.edit' | translate) : ('base-data.person-company.add' | translate)"
+           [dialogLoading]="personCompanyFacade.personCompanyStore.state$().dialogLoading$()"
+           [dialogVisible]="personCompanyFacade.personCompanyStore.state$().dialogVisible$()"
+           [totalRecords]="personCompanyFacade.personCompanyStore.state$().total$()"
+           [first]="first$()"
+           [rows]="personCompanyFacade.personCompanyStore.state$().pageSize$()"
+           (page)="page($event)"
+           (saveOrUpdate)="saveOrUpdatePersonCompany()"
+           (dismiss)="resetForm()"
+           (search)="filterPersonCompany($event)"
+           (clear)="clearFilters()"
+           (add)="setEditMode()">
+
+  <ng-template #addEditDialog>
+    <base-add-edit-person-company/>
+  </ng-template>
+</view-crud>

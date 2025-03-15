@@ -1,0 +1,48 @@
+<view-crud
+  [metaData]="appFacade.appStore.state$().pageMetadata$()"
+  [data]="orderFacade.orderStore.state$().orderList$()"
+  [cols]="cols"
+  [tableActions]="actions"
+  [allowedActions]="orderFacade.orderStore.state$().allowedActions$()"
+  [filtersLabels]="orderFacade.orderStore.state$().searchFilterLabels$()"
+  [hasRowExpansion]="true"
+  [hasDialogFooter]="actionsType() === 'PriceEstimate'"
+  [dialogWidth]="'95vw'"
+  [searchFilters]="searchFilters"
+  [toggleDrawer]="toggleDrawer"
+  [showPaginator]="showPaginator$()"
+  [editMode]="orderFacade.orderStore.state$().editMode$()"
+  [dialogHeader]="actionTitle()"
+  [dialogLoading]="orderFacade.orderStore.state$().dialogLoading$()"
+  [dialogVisible]="orderFacade.orderStore.state$().dialogVisible$()"
+  [totalRecords]="orderFacade.orderStore.state$().total$()"
+  [first]="first$()"
+  [rows]="orderFacade.orderStore.state$().pageSize$()"
+  (page)="page($event)"
+  (saveOrUpdate)="saveOrUpdatePriceEstimate()"
+  (dismiss)="resetForm()"
+  (search)="filterOrders($event)"
+  (clear)="clearFilters()"
+  (add)="setEditMode()"
+  (rowExpand)="getOrdersList($event)"
+>
+  <ng-template #tableRowExpansion let-data="data">
+    <purchase-order-item-list class="table-expanded-items" [items]="data.orderItems" />
+  </ng-template>
+
+  <ng-template #addEditDialog>
+    @switch (actionsType()) { @case ('Update') {
+    <purchase-add-edit-order
+      [activeIndex]="contentDialogActiveIndex"
+      (stepChange)="contentDialogActiveIndex = $event"
+    />
+    } @case ('Create') {
+    <purchase-add-edit-order
+      [activeIndex]="contentDialogActiveIndex"
+      (stepChange)="contentDialogActiveIndex = $event"
+    />
+    } @case ('PriceEstimate') {
+    <purchase-price-estimate />
+    } }
+  </ng-template>
+</view-crud>

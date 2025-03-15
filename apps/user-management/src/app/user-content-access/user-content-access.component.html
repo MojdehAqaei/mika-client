@@ -1,0 +1,145 @@
+<section [formGroup]="formGroup">
+
+  <cl-steps [steps]="steps"
+            [readonly]="true"
+            [nextBtnLabel]="'next' | translate"
+            [backBtnLabel]="'back' | translate"
+            [backBtnType]="'default'"
+            [confirmBtnLabel]="'final-save' | translate"
+            [(activeIndex)]="activeIndex"
+            (activeIndexChange)="stepChange.emit($event)"
+            (onConfirm)="saveOrUpdateUserRoles(); closeTheDialog()"
+            (onBack)="setStepOneValues()"
+            (onNext)="saveOrUpdateUserRoles()">
+    @if (activeIndex == 0) {
+      <div class="row">
+        <!-- user -->
+        <div class="col s12 m6 xl4 bottom-margin">
+          <label class="cl-input-label cl-required">{{ ('user-management.user.' | translate)}}</label>
+          <cl-select formControlName="userId"
+                     [lazyFilter]="false"
+                     [filterable]="true"
+                     url="users"
+                     [httpContext]="httpContext"
+                     [placeholder]="userRolesFacade.userRolesStore.state$().editMode$() || formGroup.controls['id'].value ? (userRolesFacade.userRolesStore.state$().selectedUserRole$() | ClObjectToString: 'userName' : 'userLName') : ('select' | translate)"
+                     [filterPlaceholder]= "'search-with-full-name' | translate"
+                     [optionLabel]=" ['firstName', 'lastName']"
+                     optionValue="id"
+                     clValidatorErrors
+                     [showValidatorErrors]="formGroup.controls['userId'].touched && !!formGroup.controls['userId'].errors"/>
+        </div>
+
+        <!-- role -->
+        <div class="col s12 m6 xl4 bottom-margin">
+          <label class="cl-input-label cl-required">{{ ('user-management.role.' | translate)}}</label>
+          <cl-select formControlName="roleId"
+                     [lazyFilter]="false"
+                     [filterable]="true"
+                     url="roles"
+                     [httpContext]="httpContext"
+                     [placeholder]="userRolesFacade.userRolesStore.state$().editMode$() || formGroup.controls['id'].value ? userRolesFacade.userRolesStore.state$().selectedUserRole$()?.roleName : ('select' | translate)"
+                     [filterPlaceholder]= "'search-with-name-or-code' | translate"
+                     [optionLabel]=" ['title']"
+                     optionValue="id"
+                     clValidatorErrors
+                     [showValidatorErrors]="formGroup.controls['roleId'].touched && !!formGroup.controls['roleId'].errors"/>
+        </div>
+
+        <!-- date -->
+        <!--<div class="col s12 m6 xl3">
+          <label class="cl-input-label cl-required">{{ ('user-management.permission-expiry-date' | translate)}}</label>
+          <cl-date-picker formControlName="expiryDate"
+                          [clear]="true"
+                          clValidatorErrors
+                          [showValidatorErrors]="formGroup.controls['expiryDate'].touched && !!formGroup.controls['expiryDate'].errors"/>
+        </div>-->
+
+        <!-- status -->
+        <div class="col s12 m6 xl4">
+          <label class="cl-input-label cl-required">{{ 'active-inactive' | translate}}</label>
+          <cl-input-switch styleClasses="top-margin" formControlName="isActive"/>
+        </div>
+      </div>
+    } @else {
+      <!-- content access -->
+      <div class="row" formArrayName="contentAccessLevel">
+        <div class="col s12">
+          @for (form of contentAccessLevel.controls; track form.get('label')) {
+            @if(activeIndex == $index + 1) {
+
+              <cl-alert-message [messages]="[infoAlert]"/>
+
+              <div class="row" [formGroupName]="$index">
+                <!-- has access to all content or not -->
+                <div class="col s12 l5">
+                  <cl-radio-button name="selectionMode"
+                                   value="none"
+                                   [label]="'no-access' | translate"
+                                   (onInputChange)="resetIdList(form)"
+                                   styleClasses="right margin-top left-margin"
+                                   formControlName="selectionMode"/>
+
+                  <cl-radio-button name="selectionMode"
+                                   value="all"
+                                   [label]="'access-all' | translate"
+                                   (onInputChange)="resetIdList(form)"
+                                   styleClasses="right margin-top left-margin"
+                                   formControlName="selectionMode"/>
+
+                  <cl-radio-button name="selectionMode"
+                                   value="some"
+                                   formControlName="selectionMode"
+                                   (onInputChange)="resetIdList(form)"
+                                   styleClasses="right margin-top left-margin"
+                                   [label]="'limited-access' | translate"/>
+                </div>
+
+                <!-- content type -->
+                <div class="col s12 l7">
+
+                  <div class="row">
+                    <!-- feature list-->
+                    <div class="col s12 m8">
+                      <cl-select formControlName="selectableCategory"
+                                 [lazyFilter]="true"
+                                 [filterable]="true"
+                                 [httpContext]="httpContext"
+                                 [url]="form.get('getCategoryUrl')?.value"
+                                 [optionLabel]="['name', 'title']"
+                                 clValidatorErrors
+                                 [showValidatorErrors]="!!form.get('selectableCategory')?.touched && !!form.get('selectableCategory')?.errors"/>
+                    </div>
+
+                    <!-- add button -->
+                    <div class="col s12 m4 add-button-wrapper no-top-margin">
+                      <cl-button [label]="add.label"
+                                 [disabled]="form.get('selectableCategory')?.disabled!"
+                                 [loading]="add.loading!"
+                                 [outlined]="add.outlined!"
+                                 [icon]="add.icon"
+                                 [iconPosition]="add.iconPosition"
+                                 [size]="add.size"
+                                 [styleClasses]="add.styleClass"
+                                 [type]="add.type"
+                                 (onClick)="addToTheList(form.get('selectableCategory')?.value, $index)"/>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- data -->
+              <div class="row">
+                <div class="col s12">
+                  <cl-data-table [value]="idList[$index]"
+                                 [cols]="dataCols"
+                                 dataKey="id"
+                                 [hasPaginator]="true" />
+                </div>
+              </div>
+            }
+          }
+        </div>
+      </div>
+    }
+  </cl-steps>
+</section>

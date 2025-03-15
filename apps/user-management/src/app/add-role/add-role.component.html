@@ -1,0 +1,42 @@
+<section [formGroup]="formGroup">
+
+  <div class="row">
+    <!-- title -->
+    <div class="col s12 l6 cl-form-field">
+      <label class="cl-input-label cl-required">{{ 'user-management.role.label' | translate }}</label>
+      <cl-input-text placeholder="..."
+                     formControlName="label"
+                     [maxLength]="20"
+                     clValidatorErrors
+                     [showValidatorErrors]="formGroup.controls['label'].touched && !!formGroup.controls['label'].errors"/>
+    </div>
+
+    <!-- active/ inactive -->
+    <div class="col s12 l6 cl-form-field">
+      <label class="cl-input-label cl-required">{{ ('active' | translate) +'/'+ ('inactive' | translate) }}</label>
+      <cl-input-switch styleClasses="top-margin" formControlName="isActive" />
+    </div>
+  </div>
+
+  <!-- permissions -->
+  <div class="row">
+    <div class="col s12 cl-form-field">
+      <!-- actions -->
+      <div class="tree-actions bottom-margin">
+        <span class="pointer" (click)="treeComponent?.expandAll()"><i class="material-icons">unfold_more</i>{{ 'unfold_more' | translate }}</span>
+        <span class="pointer" (click)="treeComponent?.collapseAll()"><i class="material-icons">unfold_less</i>{{ 'unfold_less' | translate }}</span>
+        <span class="pointer" (click)="treeComponent?.selectAll()"><i class="material-icons">check_box</i>{{ 'check_box' | translate }}</span>
+        <span class="pointer" (click)="treeComponent?.unSelectAll()"><i class="material-icons">check_box_outline_blank</i>{{ 'check_box_outline_blank' | translate }}</span>
+      </div>
+
+      <label class="cl-input-label cl-required">{{ 'user-management.permissions' | translate }}</label>
+      <cl-tree [data]="roleFacade.roleStore.state$().permissions$()"
+               [selectable]="true"
+               selectionMode="multiple"
+               dataKey="id"
+               [(selection)]="selectedPermissionsIds"/>
+
+    </div>
+  </div>
+
+</section>

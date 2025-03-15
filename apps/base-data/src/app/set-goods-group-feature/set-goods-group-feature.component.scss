@@ -1,0 +1,36 @@
+.feature-list-wrapper:not(:empty) {
+  border: solid 1px rgba(0, 0, 0, 0.12);
+  border-radius: 4px;
+
+  .feature-list-inner-heading {
+    display: flex;
+    padding: .75rem 1.5rem;
+    font-weight: bold;
+  }
+
+  .feature-list-inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    cursor: move;
+    border-top: solid 1px rgba(0, 0, 0, 0.12);
+    padding: 0.75rem 1.5rem;
+    &:last-of-type {
+      //border-top: 0;
+    }
+    &-index, &-heading-index {
+      width: 7.5%;
+    }
+    &-label, &-heading-label {
+      width: 50%;
+      overflow-wrap: break-word;
+    }
+    &-required, &-heading-required {
+      width: 35%;
+    }
+    &-delete, &-heading-delete {
+      width: 7.5%;
+    }
+  }
+}
+

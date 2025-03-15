@@ -1,0 +1,26 @@
+<view-crud [metaData]="appFacade.appStore.state$().pageMetadata$()"
+           [data]="stockroomFacade.stockroomStore.state$().stockroomsList$()"
+           [cols]="cols"
+           [tableActions]="actions"
+           [allowedActions]="stockroomFacade.stockroomStore.state$().allowedActions$()"
+           [searchFilters]="searchFilters"
+           [filtersLabels]="stockroomFacade.stockroomStore.state$().searchFilterLabels$()"
+           [toggleDrawer]="toggleDrawer"
+           [showPaginator]="showPaginator$()"
+           [editMode]="stockroomFacade.stockroomStore.state$().editMode$()"
+           [dialogVisible]="stockroomFacade.stockroomStore.state$().dialogVisible$()"
+           [dialogHeader]="stockroomFacade.stockroomStore.state$().editMode$() ? ('stockroom.edit' | translate) : ('stockroom.add' | translate)"
+           [dialogLoading]="stockroomFacade.stockroomStore.state$().dialogLoading$()"
+           [totalRecords]="stockroomFacade.stockroomStore.state$().total$()"
+           [first]="first$()"
+           [rows]="stockroomFacade.stockroomStore.state$().pageSize$()"
+           (page)="page($event)"
+           (add)="setEditMode()"
+           (saveOrUpdate)="saveOrUpdateStockroom()"
+           (dismiss)="resetForm()"
+           (search)="filterStockrooms($event)"
+           (clear)="clearFilters()">
+  <ng-template #addEditDialog>
+    <stockroom-add-edit-stockroom/>
+  </ng-template>
+</view-crud>

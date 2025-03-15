@@ -1,0 +1,45 @@
+<section [formGroup]="formGroup">
+  <div class="row">
+    <!-- fiscal year -->
+    <div class="col s12 l4 cl-form-field">
+      <label class="cl-input-label cl-required">{{ 'stockroom.fiscal-year.' | translate }}</label>
+      <cl-select formControlName="fiscalYearId"
+                 [placeholder]="fiscalYearPerStockroomFacade.fiscalYearPerStockroomStore.state$().editMode$() ? formGroup.controls['fiscalYearTitle'].value : ('select' | translate)"
+                 [lazyFilter]="true"
+                 [filterable]="true"
+                 [filterPlaceholder]= "'search'| translate"
+                 optionValue="id"
+                 [optionLabel]="['title']"
+                 [url]="'fiscal-periods/' + endpointsEnum.findByKeyword"
+                 [httpContext]="httpContext"
+                 clValidatorErrors
+                 [showValidatorErrors]="formGroup.controls['fiscalYearId'].touched && !!formGroup.controls['fiscalYearId'].errors"/>
+    </div>
+
+    <!-- stockroom -->
+    <div class="col s12 l4 cl-form-field">
+      <label class="cl-input-label cl-required">{{ 'stockroom.title' | translate }}</label>
+      <cl-select formControlName="stockroomId"
+                 [placeholder]="fiscalYearPerStockroomFacade.fiscalYearPerStockroomStore.state$().editMode$() ? formGroup.controls['stockroomTitle'].value : ('select' | translate)"
+                 [lazyFilter]="true"
+                 [filterable]="true"
+                 [filterPlaceholder]= "'search'| translate"
+                 optionValue="id"
+                 [optionLabel]="['title' , 'code']"
+                 url="inventories/search/actives"
+                 [httpContext]="httpContext"
+                 clValidatorErrors
+                 [showValidatorErrors]="formGroup.controls['stockroomId'].touched && !!formGroup.controls['stockroomId'].errors"/>
+    </div>
+
+    <!-- state -->
+    <div class="col s12 l4 cl-form-field">
+      <label class="cl-input-label cl-required">{{ 'status' | translate }}</label>
+      <cl-select formControlName="state"
+                 [options]="fiscalYearStatusOptions"
+                 [filterable]="fiscalYearStatusOptions && fiscalYearStatusOptions.length > 5"
+                 clValidatorErrors
+                 [showValidatorErrors]="formGroup.controls['state'].touched && !!formGroup.controls['state'].errors"/>
+    </div>
+  </div>
+</section>

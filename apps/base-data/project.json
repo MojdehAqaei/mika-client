@@ -1,0 +1,110 @@
+{
+  "name": "base-data",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "projectType": "application",
+  "prefix": "base",
+  "sourceRoot": "apps/base-data/src",
+  "tags": ["scope:data", "type:remote-app"],
+  "targets": {
+    "build": {
+      "executor": "@nx/angular:webpack-browser",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/apps/base-data",
+        "index": "apps/base-data/src/index.html",
+        "main": "apps/base-data/src/main.ts",
+        "polyfills": ["zone.js"],
+        "tsConfig": "apps/base-data/tsconfig.app.json",
+        "inlineStyleLanguage": "scss",
+        "assets": [
+          "apps/base-data/src/favicon.ico",
+          "apps/base-data/src/assets"
+        ],
+        "styles": ["apps/base-data/src/styles.scss"],
+        "scripts": [],
+        "customWebpackConfig": {
+          "path": "apps/base-data/webpack.config.ts"
+        }
+      },
+      "configurations": {
+        "production": {
+          "budgets": [
+            {
+              "type": "initial",
+              "maximumWarning": "500kb",
+              "maximumError": "1mb"
+            },
+            {
+              "type": "anyComponentStyle",
+              "maximumWarning": "2kb",
+              "maximumError": "4kb"
+            }
+          ],
+          "outputHashing": "all",
+          "customWebpackConfig": {
+            "path": "apps/base-data/webpack.prod.config.ts"
+          }
+        },
+        "development": {
+          "buildOptimizer": false,
+          "optimization": false,
+          "vendorChunk": true,
+          "extractLicenses": false,
+          "sourceMap": true,
+          "namedChunks": true
+        }
+      },
+      "defaultConfiguration": "production"
+    },
+    "serve": {
+      "executor": "@nx/angular:dev-server",
+      "options": {
+        "port": 2527,
+        "publicHost": "http://localhost:2527"
+      },
+      "configurations": {
+        "production": {
+          "buildTarget": "base-data:build:production"
+        },
+        "development": {
+          "buildTarget": "base-data:build:development"
+        }
+      },
+      "defaultConfiguration": "development"
+    },
+    "extract-i18n": {
+      "executor": "@angular-devkit/build-angular:extract-i18n",
+      "options": {
+        "buildTarget": "base-data:build"
+      }
+    },
+    "lint": {
+      "executor": "@nx/eslint:lint",
+      "outputs": ["{options.outputFile}"]
+    },
+    "test": {
+      "executor": "@nx/jest:jest",
+      "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
+      "options": {
+        "jestConfig": "apps/base-data/jest.config.ts"
+      }
+    },
+    "serve-static": {
+      "executor": "@nx/web:file-server",
+      "defaultConfiguration": "production",
+      "options": {
+        "buildTarget": "base-data:build",
+        "port": 2527,
+        "watch": false
+      },
+      "configurations": {
+        "development": {
+          "buildTarget": "base-data:build:development"
+        },
+        "production": {
+          "buildTarget": "base-data:build:production"
+        }
+      }
+    }
+  }
+}

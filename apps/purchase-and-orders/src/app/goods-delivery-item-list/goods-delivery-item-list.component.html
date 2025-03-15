@@ -1,0 +1,73 @@
+@switch (view()) {
+  @case ('table') {
+    @if (canEditSerialNumbers()) {
+      <cl-alert-message [messages]="[infoAlert]"/>
+    }
+
+    <cl-data-table [value]="items()"
+                   [cols]="cols"
+                   [actions]="actions"
+                   [actionsBtnIcon]="'more_vert'"
+                   [rowExpand]="tableExpandable()"
+                   (onRowExpand)="setSerialNumbers($event)"
+                   [hasPaginator]="false">
+
+      <ng-template clTemplate="rowexpansion" let-data="data">
+        <purchase-goods-delivery-item-serial-number [deliveryItem]="data"
+                                                    [readonlySerial]="!canEditSerialNumbers()"
+                                                    (goodsDeliveryItemModelChange)="updateItems($event)"/>
+      </ng-template>
+    </cl-data-table>
+
+  }
+
+  @case('simple') {
+    @for (item of items(); track item.id) {
+      <div class="goods-delivery-item-wrapper">
+        <!-- goods code -->
+        <div class="goods-delivery-item-inner">
+          <strong>{{'base-data.goods.code' | translate}}: </strong>
+          <span>{{ item | ClObjectToString:'goodsCode' || '-'}}</span>
+        </div>
+
+        <!-- goode label -->
+        <div class="goods-delivery-item-inner">
+          <strong>{{'base-data.goods.' | translate}}: </strong>
+          <span>{{ item | ClObjectToString:'goodsLabel' || '-'}}</span>
+        </div>
+
+        <!-- counting unit title -->
+        <div class="goods-delivery-item-inner">
+          <strong>{{'base-data.counting-unit.type' | translate}}: </strong>
+          <span>{{ item | ClObjectToString:'countingUnitTitle' || '-'}}</span>
+        </div>
+
+        <!-- quantity / value -->
+        <div class="goods-delivery-item-inner">
+          <strong>{{('quantity' | translate) + ' / ' + ('value' | translate)}}: </strong>
+          <span>{{ item | ClObjectToString: 'quantity' || '-'}}</span>
+        </div>
+
+        <!-- price -->
+        <div class="goods-delivery-item-inner">
+          <strong>{{'unit-price' | translate}}: </strong>
+          <span>{{ item.price ? ((item | ClObjectToString:'price') | currency:'': '': '3.0-0') + ' ' + ('currency.rial' | translate) : '-'}}</span>
+        </div>
+
+        <!-- description -->
+        <div class="goods-delivery-item-inner">
+          <strong>{{'description' | translate}}: </strong>
+          <span>{{ item | ClObjectToString:'description' || '-'}}</span>
+        </div>
+      </div>
+    }
+
+    @if (!items() || !items().length) {
+      <div class="padding center-align">{{ 'messages.no-record' | translate }}</div>
+    }
+  }
+
+  @default {
+
+  }
+}

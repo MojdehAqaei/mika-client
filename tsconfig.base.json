@@ -1,0 +1,44 @@
+{
+  "compileOnSave": false,
+  "compilerOptions": {
+    "rootDir": ".",
+    "sourceMap": true,
+    "declaration": false,
+    "moduleResolution": "node",
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "importHelpers": true,
+    "target": "es2015",
+    "module": "esnext",
+    "lib": ["es2020", "dom"],
+    "skipLibCheck": true,
+    "skipDefaultLibCheck": true,
+    "baseUrl": ".",
+    "paths": {
+      "@api/lib": ["libs/api/src/index.ts"],
+      "@api/lib/*": ["libs/api/src/*/index.ts"],
+      "@base-data/routes": [
+        "apps/base-data/src/app/remote-entry/entry.routes.ts"
+      ],
+      "@domain/lib": ["libs/domain/src/index.ts"],
+      "@domain/lib/*": ["libs/domain/src/*/index.ts"],
+      "@inventory/*": ["apps/shell/src/*"],
+      "@purchase-and-orders/routes": [
+        "apps/purchase-and-orders/src/app/remote-entry/entry.routes.ts"
+      ],
+      "@state/lib": ["libs/state/src/index.ts"],
+      "@state/lib/*": ["libs/state/src/*/index.ts"],
+      "@stockroom/routes": [
+        "apps/stockroom/src/app/remote-entry/entry.routes.ts"
+      ],
+      "@user-management/routes": [
+        "apps/user-management/src/app/remote-entry/entry.routes.ts"
+      ],
+      "@view/lib": ["libs/view/src/index.ts"],
+      "@view/lib/*": ["libs/view/src/*/index.ts"],
+      "@report/routes": ["apps/report/src/app/remote-entry/entry.routes.ts"]
+    },
+    "resolveJsonModule": true
+  },
+  "exclude": ["node_modules", "tmp"]
+}

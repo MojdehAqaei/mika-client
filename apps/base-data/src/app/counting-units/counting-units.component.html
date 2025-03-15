@@ -1,0 +1,28 @@
+<view-crud [metaData]="appFacade.appStore.state$().pageMetadata$()"
+           [data]="countingUnitFacade.countingUnitStore.state$().countingUnits$()"
+           [cols]="cols"
+           [tableActions]="actions"
+           [allowedActions]="countingUnitFacade.countingUnitStore.state$().allowedActions$()"
+           [searchFilters]="searchFilters"
+           [filtersLabels]="countingUnitFacade.countingUnitStore.state$().searchFilterLabels$()"
+           [toggleDrawer]="toggleDrawer"
+           [showPaginator]="showPaginator$()"
+           [editMode]="countingUnitFacade.countingUnitStore.state$().editMode$()"
+           [dialogVisible]="countingUnitFacade.countingUnitStore.state$().dialogVisible$()"
+           [dialogMinHeight]="190"
+           [dialogHeader]="countingUnitFacade.countingUnitStore.state$().editMode$() ? ('base-data.counting-unit.edit' | translate) : ('base-data.counting-unit.add' | translate)"
+           [dialogLoading]="countingUnitFacade.countingUnitStore.state$().dialogLoading$()"
+           [totalRecords]="countingUnitFacade.countingUnitStore.state$().total$()"
+           [first]="first$()"
+           [rows]="countingUnitFacade.countingUnitStore.state$().pageSize$()"
+           (page)="page($event)"
+           (add)="setEditMode()"
+           (saveOrUpdate)="saveOrUpdateCountingUnit()"
+           (dismiss)="resetForm()"
+           (search)="filterCountingUnits($event)"
+           (clear)="clearFilters()">
+
+  <ng-template #addEditDialog>
+    <base-add-edit-counting-unit/>
+  </ng-template>
+</view-crud>

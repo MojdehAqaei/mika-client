@@ -1,0 +1,46 @@
+.home-page-wrapper {
+  height: 100%;
+  background-color: white;
+  padding: 16px;
+  border-radius: 4px;
+
+  .home-user-info {
+    &.cl-user-info-card {
+      background-color: #ffffff;
+      .cl-user-info-card-header {
+        .user-avatar {
+          display: none;
+        }
+        margin-bottom: 20px;
+        padding: 0;
+        color: #2563EB;
+        font-size: 14px;
+        font-weight: bold;
+      }
+      .cl-user-info-card-content {
+        background: transparent;
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 24px;
+        border: 1px solid #CBD5E1;
+        padding: 20px;
+        border-radius: 8px;
+      }
+    }
+  }
+
+  .announcements {
+    display: flex;
+    flex-direction: column;
+    row-gap: 16px;
+  }
+
+  .view-all-announcements {
+    text-align: left;
+    margin: 16px 0 0 16px;
+    font-weight: 500;
+    direction: ltr;
+    font-size: 1rem;
+  }
+
+}

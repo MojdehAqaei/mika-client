@@ -1,0 +1,37 @@
+<section [formGroup]="formGroup">
+  <!-- counting round -->
+  <div class="row">
+    <div class="col s12">
+      <cl-select-button [options]="warehousingCountingRoundOptions"
+                        formControlName="countingRound"
+                        [separate]="true"
+                        (onSelect)="warehousingFacade.updateWarehousingItemsByRound($event.value)"/>
+    </div>
+  </div>
+
+  <!-- warehousing items -->
+  <view-heading [title]="'base-data.goods.list' | translate" [icon]="'box'" styleClasses="no-margin"/>
+  <cl-data-table [value]="list.value"
+                 [cols]="cols">
+    <ng-template clTemplate="body" let-item="row" let-index="index">
+      <div formArrayName="list">
+        <tr class="row" [formGroupName]="index">
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td>
+            <cl-text-area formControlName="description"
+                          [maxLength]="500"
+                          [showLength]="true"
+                          [placeholder]="'description' | translate"
+                          clValidatorErrors
+                          [showValidatorErrors]="item.controls['description']?.touched && !!item.controls['description']?.errors"/>
+          </td>
+        </tr>
+      </div>
+    </ng-template>
+  </cl-data-table>
+
+</section>

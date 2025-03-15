@@ -1,0 +1,71 @@
+<section [formGroup]="formGroup">
+  <div class="row no-bottom-margin">
+    <!-- organization -->
+    <div class="col s12 l4 cl-form-field">
+      <label class="cl-input-label cl-required">{{ 'organization' | translate }}</label>
+      <cl-select formControlName="organizationId"
+                 [placeholder]="stockroomFacade.stockroomStore.state$().editMode$() ? formGroup.controls['organizationName'].value : ('select' | translate)"
+                 [lazyFilter]="true"
+                 [filterable]="true"
+                 [filterPlaceholder]= "'search-with-name-or-code'| translate"
+                 optionValue="id"
+                 [optionLabel]="['typeName' , 'name' , '/' , 'code']"
+                 url="organizations/search/actives"
+                 [httpContext]="httpContext"
+                 (onSelect)="setOrganizationName($event); setTitle($event)"
+                 clValidatorErrors
+                 [showValidatorErrors]="formGroup.controls['organizationId'].touched && !!formGroup.controls['organizationId'].errors"/>
+    </div>
+
+    <!-- inventory type -->
+    <div class="col s12 l4 cl-form-field">
+      <label class="cl-input-label cl-required">{{ 'stockroom.inventory-type.' | translate }}</label>
+      <cl-select formControlName="inventoryTypeId"
+                 [placeholder]="stockroomFacade.stockroomStore.state$().editMode$() ? formGroup.controls['inventoryTypeTitle'].value : ('select' | translate)"
+                 [lazyFilter]="true"
+                 [filterable]="true"
+                 [filterPlaceholder]= "'search-with-name-or-code'| translate"
+                 optionValue="id"
+                 [optionLabel]="['title' , '/' , 'code']"
+                 url="inventory-type/search/actives"
+                 [httpContext]="httpContext"
+                 (onSelect)="setInventoryTypeTitle($event); setTitle($event); setCode($event)"
+                 clValidatorErrors
+                 [showValidatorErrors]="formGroup.controls['inventoryTypeId'].touched && !!formGroup.controls['inventoryTypeId'].errors"/>
+    </div>
+
+    <!-- active/ inactive -->
+    <div class="col s12 l4 cl-form-field">
+      <label class="cl-input-label cl-required">{{ 'active-inactive' | translate }}</label>
+      <cl-input-switch styleClasses="top-margin" formControlName="isActive" />
+    </div>
+  </div>
+
+  <div class="row no-bottom-margin">
+    <!-- title -->
+    <div class="col s12 l4 cl-form-field">
+      <label class="cl-input-label">{{ 'stockroom.title' | translate }}</label>
+      <cl-input-text formControlName="title"/>
+    </div>
+
+    <!-- code -->
+    <div class="col s12 l4 cl-form-field">
+      <label class="cl-input-label">{{ 'stockroom.code' | translate }}</label>
+      <cl-input-text formControlName="code"/>
+    </div>
+  </div>
+
+
+  <div class="row">
+    <!-- description -->
+    <div class="col s12 cl-form-field">
+      <label class="cl-input-label">{{  ('description' | translate) }}</label>
+      <cl-text-area formControlName="description"
+                    [maxLength]="500"
+                    [showLength]="true"
+                    [placeholder]="'description' | translate"
+                    clValidatorErrors
+                    [showValidatorErrors]="formGroup.controls['description'].touched && !!formGroup.controls['description'].errors"/>
+    </div>
+  </div>
+</section>

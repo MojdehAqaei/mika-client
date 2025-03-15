@@ -1,0 +1,76 @@
+<!--====== DO NOT CHANGE THIS: [dismissible]="false" ======-->
+<cl-dialog [header]="header"
+           [dismissible]="false"
+           [resizeable]="resizeable"
+           [closeable]="hasFooter() ? dismissible ? !dismissButton.disabled : false : true"
+           (onShow)="show.emit()"
+           (onHide)="dismiss.emit()"
+           [visible]="visible()"
+           [width]="width"
+  >
+
+<!--  <ng-template clTemplate="header"></ng-template>-->
+
+  @if(loading) {
+    <div class="center-position">
+      <cl-spinner [show]="true" size="md" [colorList]="['#01161e', '#2563eb', '#e6e6fa', '#ffffff']"/>
+    </div>
+  } @else {
+
+    @defer (on immediate) {
+      <ng-content select="[dialog-content]"></ng-content>
+    } @loading {
+      <div class="center-position">
+        <cl-spinner [show]="true" size="md" [colorList]="['#01161e', '#2563eb', '#e6e6fa', '#ffffff']"/>
+      </div>
+    }
+  }
+
+
+  <!-- footer -->
+  <ng-template clTemplate="footer">
+    @if (hasFooter()) {
+      <div class="left-align">
+
+      <!-- dismiss -->
+      @if (dismissible) {
+        <cl-button [label]="dismissButton.label"
+                   [disabled]="dismissButton.disabled!"
+                   [loading]="dismissButton.loading!"
+                   [outlined]="dismissButton.outlined!"
+                   [icon]="dismissButton.icon"
+                   [iconPosition]="dismissButton.iconPosition"
+                   [size]="dismissButton.size"
+                   [styleClasses]="dismissButton.styleClass!"
+                   [type]="dismissButton.type"
+                   (onClick)="dismiss.emit()"/>
+      }
+
+      <!-- save/update -->
+      @if (editMode) {
+        <cl-button [label]="updateButton.label"
+                   [disabled]="updateButton.disabled!"
+                   [loading]="updateButton.loading!"
+                   [outlined]="updateButton.outlined!"
+                   [icon]="updateButton.icon"
+                   [iconPosition]="updateButton.iconPosition"
+                   [size]="updateButton.size"
+                   [styleClasses]="updateButton.styleClass!"
+                   [type]="updateButton.type"
+                   (onClick)="updateButton.command ? updateButton.command($event) : null"/>
+      } @else {
+        <cl-button [label]="saveButton.label"
+                   [disabled]="saveButton.disabled!"
+                   [loading]="saveButton.loading!"
+                   [outlined]="saveButton.outlined!"
+                   [icon]="saveButton.icon"
+                   [iconPosition]="saveButton.iconPosition"
+                   [size]="saveButton.size"
+                   [styleClasses]="saveButton.styleClass!"
+                   [type]="saveButton.type"
+                   (onClick)="saveButton.command ? saveButton.command($event) : null"/>
+      }
+    </div>
+    }
+  </ng-template>
+</cl-dialog>

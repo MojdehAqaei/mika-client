@@ -1,0 +1,27 @@
+<view-crud [metaData]="appFacade.appStore.state$().pageMetadata$()"
+           [data]="roleFacade.roleStore.state$().roles$()"
+           [cols]="cols"
+           [tableActions]="actions"
+           [allowedActions]="roleFacade.roleStore.state$().allowedActions$()"
+           [searchFilters]="searchFilters"
+           [filtersLabels]="roleFacade.roleStore.state$().searchFilterLabels$()"
+           [toggleDrawer]="toggleDrawer"
+           [dialogVisible]="roleFacade.roleStore.state$().dialogVisible$()"
+           [showPaginator]="showPaginator$()"
+           [editMode]="roleFacade.roleStore.state$().editMode$()"
+           [dialogHeader]="roleFacade.roleStore.state$().editMode$() ? ('user-management.role.edit' | translate) : ('user-management.role.add' | translate)"
+           [dialogLoading]="roleFacade.roleStore.state$().dialogLoading$()"
+           [totalRecords]="roleFacade.roleStore.state$().total$()"
+           [first]="first$()"
+           [rows]="roleFacade.roleStore.state$().pageSize$()"
+           (page)="page($event)"
+           (add)="setEditMode()"
+           (saveOrUpdate)="saveOrUpdateRole()"
+           (dismiss)="resetForm()"
+           (search)="filterRoles($event)"
+           (clear)="clearFilters()">
+  <ng-template #addEditDialog>
+    <user-add-role />
+  </ng-template>
+</view-crud>
+

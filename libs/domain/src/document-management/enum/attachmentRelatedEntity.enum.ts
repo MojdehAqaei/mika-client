@@ -1,0 +1,2 @@
+export type AttachRelatedEntityType =
+  'ORDER' | 'INVOICE' | 'PRICE_ESTIMATE' | 'PURCHASE_REFERENCE' | 'INVENTORY_COUNT' | 'RETURN_INVOICE';

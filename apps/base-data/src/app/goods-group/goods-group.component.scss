@@ -1,0 +1,14 @@
+.goods-group-tree {
+  ul.cl-treenode-children{
+    position: relative;
+    &:before {
+      content: '';
+      position: absolute;
+      width: 1px;
+      height: 100%;
+      top: 0;
+      border-right: dashed 1px #0009;
+      right: calc(1rem + 3px);
+    }
+  }
+}

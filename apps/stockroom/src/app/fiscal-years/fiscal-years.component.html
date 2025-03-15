@@ -1,0 +1,25 @@
+<view-crud [metaData]="appFacade.appStore.state$().pageMetadata$()"
+           [data]="fiscalYearFacade.fiscalYearStore.state$().fiscalYears$()"
+           [cols]="cols"
+           [tableActions]="actions"
+           [allowedActions]="fiscalYearFacade.fiscalYearStore.state$().allowedActions$()"
+           [searchFilters]="searchFilters"
+           [filtersLabels]="fiscalYearFacade.fiscalYearStore.state$().searchFilterLabels$()"
+           [toggleDrawer]="toggleDrawer"
+           [showPaginator]="showPaginator$()"
+           [first]="first$()"
+           [rows]="fiscalYearFacade.fiscalYearStore.state$().pageSize$()"
+           [editMode]="fiscalYearFacade.fiscalYearStore.state$().editMode$()"
+           [dialogVisible]="fiscalYearFacade.fiscalYearStore.state$().dialogVisible$()"
+           [dialogHeader]="fiscalYearFacade.fiscalYearStore.state$().editMode$() ? ('stockroom.fiscal-year.edit' | translate) : ('stockroom.fiscal-year.add' | translate)"
+           [dialogLoading]="fiscalYearFacade.fiscalYearStore.state$().dialogLoading$()"
+           (page)="page($event)"
+           (add)="setEditMode()"
+           (saveOrUpdate)="saveOrUpdateFiscalYear()"
+           (dismiss)="resetForm()"
+           (search)="filterFiscalYears($event)"
+           (clear)="clearFilters()">
+  <ng-template #addEditDialog>
+    <stockroom-add-fiscal-year/>
+  </ng-template>
+</view-crud>

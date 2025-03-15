@@ -1,0 +1,26 @@
+<view-crud [metaData]="appFacade.appStore.state$().pageMetadata$()"
+           [data]="userFacade.userStore.state$().users$()"
+           [cols]="cols"
+           [tableActions]="actions"
+           [allowedActions]="userFacade.userStore.state$().allowedActions$()"
+           [searchFilters]="searchFilters"
+           [filtersLabels]="userFacade.userStore.state$().searchFilterLabels$()"
+           [toggleDrawer]="toggleDrawer"
+           [showPaginator]="showPaginator$()"
+           [editMode]="userFacade.userStore.state$().editMode$()"
+           [dialogVisible]="userFacade.userStore.state$().dialogVisible$()"
+           [dialogHeader]="userFacade.userStore.state$().editMode$() ? ('user-management.user.edit' | translate) : ('user-management.user.add' | translate)"
+           [dialogLoading]="userFacade.userStore.state$().dialogLoading$()"
+           [totalRecords]="userFacade.userStore.state$().total$()"
+           [first]="first$()"
+           [rows]="userFacade.userStore.state$().pageSize$()"
+           (page)="page($event)"
+           (add)="setEditMode()"
+           (saveOrUpdate)="saveOrUpdateUser()"
+           (dismiss)="resetForm()"
+           (search)="filterUsers($event)"
+           (clear)="clearFilters()">
+  <ng-template #addEditDialog>
+    <user-add-user/>
+  </ng-template>
+</view-crud>

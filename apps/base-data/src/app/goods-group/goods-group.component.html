@@ -1,0 +1,40 @@
+<view-content-wrapper [metaData]="appFacade.appStore.state$().pageMetadata$()">
+<div content-body>
+
+  <!-- goods group tree -->
+  <cl-tree #goodsGroupTreeRef
+           [data]="goodsGroupFacade.goodsGroupStore.state$().goodsGroupTreeData$()"
+           [selectable]="true"
+           styleClasses="goods-group-tree"
+           [loading]="goodsGroupFacade.goodsGroupStore.state$().dialogLoading$()"
+           (onContextMenuOpen)="goodsGroupFacade.updateSelectedGoodsGroup($event); setContextMenu()"
+           (onNodeExpand)="onNodeExpand($event)"/>
+
+  <!-- goods group action list -->
+  <cl-context-menu [list]="contextMenuList"
+                   [appendTo]="goodsGroupTreeRef"
+                   [isRtl]="true" />
+
+  <!-- action dialog content -->
+  <view-dialog [header]="dialogHeader"
+               [visible]="goodsGroupFacade.goodsGroupStore.state$().dialogVisible$()"
+               [loading]="false"
+               [width]="'60vw'"
+               [editMode]="goodsGroupFacade.goodsGroupStore.state$().editMode$()"
+               (dismiss)="goodsGroupFacade.toggleDialogVisibility(false)"
+               (actionCall)="saveOrUpdateGoodsGroupForms()">
+    <div dialog-content>
+      <!-- goods group data-->
+      <div class="bottom-margin">
+        <strong>{{goodsGroupFacade.goodsGroupStore.state$().selectedGoodsGroup$().label}}</strong>
+      </div>
+
+      @if (mode == 'add' || mode == 'edit') {
+        <base-add-edit-goods-group/>
+      } @else if (mode == 'setFeature') {
+        <base-set-goods-group-feature/>
+      }
+    </div>
+  </view-dialog>
+</div>
+</view-content-wrapper>

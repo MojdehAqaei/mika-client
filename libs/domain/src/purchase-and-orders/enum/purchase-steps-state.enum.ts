@@ -1,0 +1,6 @@
+export enum PurchaseStepsStateEnum {
+  INITIAL_SUBMIT = 'INITIAL_SUBMIT',
+  BUYING = 'BUYING',
+  FINISH_BUY = 'FINISH_BUY',
+  CANCEL_BUY = 'CANCEL_BUY',
+}

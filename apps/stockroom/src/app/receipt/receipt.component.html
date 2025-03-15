@@ -1,0 +1,31 @@
+<view-crud [metaData]="appFacade.appStore.state$().pageMetadata$()"
+           [data]="receiptFacade.receiptStore.state$().receipts$()"
+           [cols]="cols"
+           [tableActions]="actions"
+           [hasRowExpansion]="true"
+           [hasDialogFooter]="false"
+           [allowedActions]="receiptFacade.receiptStore.state$().allowedActions$()"
+           [searchFilters]="searchFilters"
+           [filtersLabels]="receiptFacade.receiptStore.state$().searchFilterLabels$()"
+           [toggleDrawer]="toggleDrawer"
+           [showPaginator]="showPaginator$()"
+           [dialogHeader]="('preview' | translate) + ' ' + ('stockroom.receipt.' | translate)"
+           [dialogLoading]="receiptFacade.receiptStore.state$().dialogLoading$()"
+           [dialogVisible]="receiptFacade.receiptStore.state$().dialogVisible$()"
+           [totalRecords]="receiptFacade.receiptStore.state$().total$()"
+           [first]="first$()"
+           [rows]="receiptFacade.receiptStore.state$().pageSize$()"
+           (page)="page($event)"
+           (excel)="downloadExcel($event)"
+           (dismiss)="dismiss()"
+           (search)="filterReceipts($event)"
+           (clear)="clearFilters()">
+  <ng-template #tableRowExpansion let-data="data">
+    <stockroom-transfer-and-receipt-item-list class="table-expanded-items" [items]="data?.transferAndReceiptItems"/>
+  </ng-template>
+
+  <!-- preview -->
+  <ng-template #addEditDialog>
+    <stockroom-transfer-and-receipt-preview type="RECEIPT" [data]="receiptFacade.receiptStore.state$().selectedReceipt$()"/>
+  </ng-template>
+</view-crud>

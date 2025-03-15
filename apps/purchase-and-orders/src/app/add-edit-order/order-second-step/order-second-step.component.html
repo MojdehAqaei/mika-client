@@ -1,0 +1,176 @@
+<view-heading
+  [title]="'base-data.goods.save' | translate"
+  [icon]="'box_add'"
+  styleClasses="no-top-margin"
+/>
+
+<!-- save goods -->
+<section [formGroup]="formGroup">
+  <div class="row no-bottom-margin">
+    <!-- goods -->
+    <div class="col s12 l4 cl-form-field">
+      <label class="cl-input-label cl-required">{{
+        'base-data.goods.' | translate
+      }}</label>
+      <cl-select
+        formControlName="goodsId"
+        url="goods-services/search/actives"
+        [placeholder]="'select' | translate"
+        [filterable]="true"
+        [lazyFilter]="true"
+        [httpContext]="httpContext"
+        [optionLabel]="['title', 'code']"
+        optionValue="id"
+        (onSelect)="setSelectedGoods($event)"
+        clValidatorErrors
+        [showValidatorErrors]="
+          formGroup.controls['goodsId'].touched &&
+          !!formGroup.controls['goodsId'].errors
+        "
+      />
+    </div>
+
+    <!-- counting unit -->
+    <div class="col s12 l4 cl-form-field">
+      <label class="cl-input-label">{{
+        'base-data.counting-unit.type' | translate
+      }}</label>
+      <cl-input-text formControlName="countingUnitTitle" />
+    </div>
+
+    <!-- quantity / value -->
+    <div class="col s12 l4 cl-form-field">
+      <label class="cl-input-label cl-required">{{
+        ('quantity' | translate) + ' / ' + ('value' | translate)
+      }}</label>
+      <cl-input-number
+        placeholder="..."
+        formControlName="quantity"
+        [maxFractionDigits]="formGroup.controls['isGoodsFloat'].value ? 2 : 0"
+        clValidatorErrors
+        [showValidatorErrors]="
+          formGroup.controls['quantity'].touched &&
+          !!formGroup.controls['quantity'].errors
+        "
+      />
+    </div>
+  </div>
+
+  <div class="row no-bottom-margin">
+    <!-- applicant organization -->
+    <div class="col s12 l4 cl-form-field">
+      <label class="cl-input-label cl-required">{{
+        'purchase-and-orders.order.applicant-organization' | translate
+      }}</label>
+      <cl-select
+        formControlName="applicantOrganizationId"
+        [placeholder]="'select' | translate"
+        [url]="'organizations/search/actives/' + organizationTypes + '/'"
+        [lazyFilter]="true"
+        [filterable]="true"
+        [httpContext]="httpContext"
+        [filterPlaceholder]="'search-with-name-or-code' | translate"
+        [optionLabel]="['typeName', 'name', 'code']"
+        optionValue="id"
+        (onSelect)="setApplicantLabel($event)"
+        clValidatorErrors
+        [showValidatorErrors]="
+          formGroup.controls['applicantOrganizationId'].touched &&
+          !!formGroup.controls['applicantOrganizationId'].errors
+        "
+      />
+    </div>
+
+    <!-- request letter number -->
+    <div class="col s12 l4 cl-form-field">
+      <label class="cl-input-label">{{
+        'purchase-and-orders.order.request-letter-number' | translate
+      }}</label>
+      <cl-input-number
+        placeholder="..."
+        formControlName="requestLetterNumber"
+        clValidatorErrors
+        [showValidatorErrors]="
+          formGroup.controls['requestLetterNumber'].touched &&
+          !!formGroup.controls['requestLetterNumber'].errors
+        "
+      />
+    </div>
+
+    <!-- request letter date -->
+    <div class="col s12 l4 cl-form-field">
+      <label class="cl-input-label">{{
+        'purchase-and-orders.order.request-letter-date' | translate
+      }}</label>
+      <cl-date-picker
+        formControlName="requestLetterDate"
+        [clear]="true"
+        (select)="
+          formGroup.controls['requestLetterDatePersian'].setValue(
+            formatDate(
+              formGroup.controls['requestLetterDate'].value,
+              'YYYY/MM/DD'
+            )
+          )
+        "
+        clValidatorErrors
+        [showValidatorErrors]="
+          formGroup.controls['requestLetterDate'].touched &&
+          !!formGroup.controls['requestLetterDate'].errors
+        "
+      />
+    </div>
+  </div>
+
+  <!-- description -->
+  <div class="row">
+    <div class="col s12">
+      <label class="cl-input-label">{{ 'description' | translate }}</label>
+      <cl-text-area
+        formControlName="description"
+        [maxLength]="500"
+        [showLength]="true"
+        [placeholder]="'description' | translate"
+        clValidatorErrors
+        [showValidatorErrors]="
+          formGroup.controls['description'].touched &&
+          !!formGroup.controls['description'].errors
+        "
+      />
+    </div>
+  </div>
+
+  <!-- add button -->
+  <div class="row left-align">
+    <div class="col s12">
+      <cl-button
+        [label]="goodsAdd.label"
+        [disabled]="goodsAdd.disabled!"
+        [loading]="goodsAdd.loading!"
+        [outlined]="goodsAdd.outlined!"
+        [icon]="goodsAdd.icon"
+        [iconPosition]="goodsAdd.iconPosition"
+        [size]="goodsAdd.size"
+        [styleClasses]="goodsAdd.styleClass"
+        [type]="goodsAdd.type"
+        (onClick)="addGoodsToOrderList()"
+      />
+    </div>
+  </div>
+</section>
+
+<cl-divider />
+
+<view-heading
+  [title]="'base-data.goods.saved-list' | translate"
+  [icon]="'box'"
+  styleClasses="no-margin"
+/>
+<!-- goods list-->
+<section class="bottom-margin">
+  <purchase-order-item-list
+    [items]="orderFacade.orderStore.state$().selectedOrder$().orderItems || []"
+    [canDelete]="true"
+    [view]="'table'"
+  />
+</section>

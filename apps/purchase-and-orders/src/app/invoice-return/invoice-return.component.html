@@ -1,0 +1,56 @@
+<view-crud
+  [metaData]="appFacade.appStore.state$().pageMetadata$()"
+  [data]="invoiceReturnFacade.invoiceReturnStore.state$().invoiceReturnList$()"
+  [cols]="cols"
+  [tableActions]="actions"
+  [allowedActions]="
+    invoiceReturnFacade.invoiceReturnStore.state$().allowedActions$()
+  "
+  [filtersLabels]="
+    invoiceReturnFacade.invoiceReturnStore.state$().searchFilterLabels$()
+  "
+  [hasRowExpansion]="true"
+  [hasDialogFooter]="false"
+  [dialogWidth]="'95vw'"
+  [searchFilters]="searchFilters"
+  [toggleDrawer]="toggleDrawer"
+  [showPaginator]="showPaginator$()"
+  [editMode]="invoiceReturnFacade.invoiceReturnStore.state$().editMode$()"
+  [dialogHeader]="
+    invoiceReturnFacade.invoiceReturnStore.state$().editMode$()
+      ? ('purchase-and-orders.invoice-return.edit' | translate)
+      : ('purchase-and-orders.invoice-return.add' | translate)
+  "
+  [searchFilters]="searchFilters"
+  [toggleDrawer]="toggleDrawer"
+  (add)="setEditMode()"
+  [dialogLoading]="
+    invoiceReturnFacade.invoiceReturnStore.state$().dialogLoading$()
+  "
+  [dialogVisible]="
+    invoiceReturnFacade.invoiceReturnStore.state$().dialogVisible$()
+  "
+  [totalRecords]="invoiceReturnFacade.invoiceReturnStore.state$().total$()"
+  [first]="first$()"
+  [rows]="invoiceReturnFacade.invoiceReturnStore.state$().pageSize$()"
+  (add)="setEditMode()"
+  (page)="page($event)"
+  (saveOrUpdate)="saveOrUpdateInvoiceReturn()"
+  (dismiss)="resetForm()"
+  (search)="filterInvoiceReturn($event)"
+  (clear)="clearFilters()"
+  (rowExpand)="getItemsList($event)"
+>
+  <ng-template #tableRowExpansion let-data="data">
+    <purchase-invoice-return-item-list
+      class="items"
+      [items]="data.invoiceDetail.invoiceItemList"
+    />
+  </ng-template>
+  <ng-template #addEditDialog>
+    <purchase-add-edit-invoice-return
+      [activeIndex]="contentDialogActiveIndex"
+      (stepChange)="contentDialogActiveIndex = $event"
+    />
+  </ng-template>
+</view-crud>

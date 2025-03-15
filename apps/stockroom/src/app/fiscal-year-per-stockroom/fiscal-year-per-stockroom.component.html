@@ -1,0 +1,25 @@
+<view-crud [metaData]="appFacade.appStore.state$().pageMetadata$()"
+           [data]="fiscalYearPerStockroomFacade.fiscalYearPerStockroomStore.state$().fiscalYearPerStockroomList$()"
+           [cols]="cols"
+           [tableActions]="actions"
+           [allowedActions]="fiscalYearPerStockroomFacade.fiscalYearPerStockroomStore.state$().allowedActions$()"
+           [searchFilters]="searchFilters"
+           [filtersLabels]="fiscalYearPerStockroomFacade.fiscalYearPerStockroomStore.state$().searchFilterLabels$()"
+           [toggleDrawer]="toggleDrawer"
+           [showPaginator]="showPaginator$()"
+           [first]="first$()"
+           [rows]="fiscalYearPerStockroomFacade.fiscalYearPerStockroomStore.state$().pageSize$()"
+           [editMode]="fiscalYearPerStockroomFacade.fiscalYearPerStockroomStore.state$().editMode$()"
+           [dialogVisible]="fiscalYearPerStockroomFacade.fiscalYearPerStockroomStore.state$().dialogVisible$()"
+           [dialogHeader]="fiscalYearPerStockroomFacade.fiscalYearPerStockroomStore.state$().editMode$() ? ('stockroom.fiscal-year-per-stockroom.edit' | translate) : ('stockroom.fiscal-year-per-stockroom.add' | translate)"
+           [dialogLoading]="fiscalYearPerStockroomFacade.fiscalYearPerStockroomStore.state$().dialogLoading$()"
+           (page)="page($event)"
+           (add)="setEditMode()"
+           (saveOrUpdate)="saveOrUpdateFiscalYearPerStockroom()"
+           (dismiss)="resetForm()"
+           (search)="filterFiscalYearsPerStockroom($event)"
+           (clear)="clearFilters()">
+  <ng-template #addEditDialog>
+    <stockroom-add-edit-fiscal-year-per-stockroom/>
+  </ng-template>
+</view-crud>

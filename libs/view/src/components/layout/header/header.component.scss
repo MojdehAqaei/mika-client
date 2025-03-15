@@ -1,0 +1,24 @@
+.header-left-bar {
+  border-radius: 25px;
+  padding: 6px 16px 6px 30px;
+  &-user {
+    background-color: #CFFAFE;
+    color: #0E7490;
+  }
+
+  &-active-fiscal-period {
+    background: #EDE9FE;
+    color: #6D28D9;
+  }
+
+  .title {
+    position: relative;
+    display: inline-block;
+    &:after {
+      content: "\2BC6";
+      position: absolute;
+      right: calc(100% + 5px);
+      //top: 5px;
+    }
+  }
+}

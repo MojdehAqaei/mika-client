@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>کالا و خدمات</title>
+    <base href="/" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="icon" type="image/x-icon" href="favicon.ico" />
+  </head>
+  <body>
+    <base-data-entry>
+      <style>
+        body {
+          margin: 0;
+        }
+
+        base-data-entry {
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          height: 100vh;
+          background-color: #f0f0f0;
+        }
+
+        @keyframes loader {
+
+          0% {
+            width: 0;
+          }
+
+          10% {
+            width: 10%;
+          }
+
+          20% {
+            width: 20%;
+          }
+
+          30% {
+            width: 30%;
+          }
+
+          40% {
+            width: 40%;
+          }
+
+          50% {
+            width: 50%;
+          }
+
+          60% {
+            width: 60%;
+          }
+
+          70% {
+            width: 70%;
+
+          }
+
+          80% {
+            width: 80%;
+          }
+
+          90% {
+            width: 90%;
+          }
+
+          100% {
+            width: 100%;
+          }
+
+        }
+
+        .progress-bar {
+          width: 100%;
+          max-width: 50%;
+          border-radius: 5px;
+          overflow: hidden;
+          direction: ltr;
+        }
+
+        .bar {
+          background: rgba(0,0,0,0.075);
+        }
+
+        .progress {
+          animation: loader 11s ease infinite;
+          background: #2563eb;
+          color: #fff;
+          padding: 5px;
+          width: 0;
+        }
+
+
+      </style>
+
+      <div class="progress-bar">
+        <div class="bar">
+          <div class="progress"></div>
+        </div>
+      </div
+    </base-data-entry>
+  </body>
+</html>

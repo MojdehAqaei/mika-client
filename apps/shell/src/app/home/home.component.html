@@ -1,0 +1,27 @@
+<section class="home-page-wrapper">
+  <!-- user -->
+<!--  <cl-user-info-card [firstName]="appFacade.appStore.state$().loggedInUser$()?.userName || ''"
+                     [lastName]="appFacade.appStore.state$().loggedInUser$()?.userLName || ''"
+                     [role]="appFacade.appStore.state$().loggedInUser$()?.roleName || ''"
+                     [organizationUnit]="appFacade.appStore.state$().loggedInUser$()?.organizationName || ''"
+                     [nationalCode]="appFacade.appStore.state$().loggedInUser$()?.userNationalNumber || ''"
+                     styleClasses="home-user-info"/>
+
+  <br/>
+  <br/>-->
+
+  <!-- announcements -->
+  <view-heading [title]="'announcements' | translate" [icon]="'notifications'"/>
+  <div class="announcements">
+    @for (announcement of announcements; track $index) {
+      <view-announcement [data]="announcement"/>
+    }
+  </div>
+  <cl-link [title]="'view-all' | translate"
+           underline="none"
+           icon='chevron_backward'
+           color="info"
+           target="_self"
+           styleClasses="view-all-announcements"/>
+
+</section>

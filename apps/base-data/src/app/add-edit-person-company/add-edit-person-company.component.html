@@ -1,0 +1,133 @@
+<section [formGroup]="formGroup">
+  <div class="row no-bottom-margin">
+    <!-- person / company type-->
+    <div class="col s12 l4 cl-form-field margin">
+      <cl-radio-button name="type"
+                       [value]="personTypeEnum.NATURAL_PERSON"
+                       [label]="'base-data.person-company.natural-person' | translate"
+                       styleClasses="right top-margin left-margin"
+                       formControlName="type"/>
+
+      <cl-radio-button name="type"
+                       [value]="personTypeEnum.LEGAL_PERSON"
+                       [label]="'base-data.person-company.legal-person' | translate"
+                       styleClasses="right top-margin left-margin"
+                       formControlName="type"/>
+    </div>
+
+    <!-- name -->
+    <div class="col s12 l4 cl-form-field">
+      <label class="cl-input-label cl-required">{{ 'base-data.person-company.name' | translate }}</label>
+      <cl-input-text placeholder="..."
+                     formControlName="name"
+                     clValidatorErrors
+                     [showValidatorErrors]="formGroup.controls['name'].touched && !!formGroup.controls['name'].errors"/>
+    </div>
+
+    <!-- national number -->
+    <div class="col s12 l4 cl-form-field">
+      <label class="cl-input-label cl-required">{{ 'base-data.person-company.national-number' | translate }}</label>
+      <cl-input-text placeholder="..."
+                     clKeyFilter="num"
+                     formControlName="nationalNumber"
+                     clValidatorErrors
+                     [showValidatorErrors]="formGroup.controls['nationalNumber'].touched && !!formGroup.controls['nationalNumber'].errors"/>
+    </div>
+  </div>
+
+  @if (formGroup.controls['type'].value == personTypeEnum.LEGAL_PERSON) {
+    <div class="row no-bottom-margin">
+      <!-- ownership type-->
+      <div class="col s12 l4 cl-form-field">
+        <label class="cl-input-label">{{ 'base-data.person-company.ownership-type' | translate }}</label>
+        <cl-select formControlName="ownershipTypeId"
+                   [filterable]="true"
+                   [options]="personCompanyFacade.personCompanyStore.state$().ownershipTypes$()"
+                   optionValue="id"
+                   clValidatorErrors
+                   [showValidatorErrors]="formGroup.controls['ownershipTypeId'].touched && !!formGroup.controls['ownershipTypeId'].errors"/>
+      </div>
+
+      <!-- ceo name-->
+      <div class="col s12 l4">
+        <label class="cl-input-label">{{ 'base-data.person-company.ceo-name' | translate }}</label>
+        <cl-input-text placeholder="..."
+                       formControlName="ceoName"
+                       clValidatorErrors
+                       [showValidatorErrors]="formGroup.controls['ceoName'].touched && !!formGroup.controls['ceoName'].errors"/>
+      </div>
+
+      <!-- ceo national number-->
+      <div class="col s12 l4">
+        <label class="cl-input-label">{{ 'base-data.person-company.ceo-national-number' | translate }}</label>
+        <cl-input-text placeholder="..."
+                       clKeyFilter="num"
+                       formControlName="ceoNationalNumber"
+                       clValidatorErrors
+                       [showValidatorErrors]="formGroup.controls['ceoNationalNumber'].touched && !!formGroup.controls['ceoNationalNumber'].errors"/>
+      </div>
+    </div>
+  }
+
+
+  <div class="row no-bottom-margin'">
+    <!-- economic number -->
+    <div class="col s12 l4">
+      <label class="cl-input-label">{{ 'base-data.person-company.economic-number' | translate }}</label>
+      <cl-input-text placeholder="..."
+                     clKeyFilter="num"
+                     formControlName="economicNumber"
+                     clValidatorErrors
+                     [showValidatorErrors]="formGroup.controls['economicNumber'].touched && !!formGroup.controls['economicNumber'].errors"/>
+    </div>
+
+    <!-- email -->
+    <div class="col s12 l4">
+      <label class="cl-input-label">{{ 'email' | translate }}</label>
+      <cl-input-text placeholder="..."
+                     formControlName="email"
+                     clValidatorErrors
+                     [showValidatorErrors]="formGroup.controls['email'].touched && !!formGroup.controls['email'].errors"/>
+    </div>
+
+    <!-- active/ inactive -->
+    <div class="col s12 l4 cl-form-field">
+      <label class="cl-input-label cl-required">{{ 'active-inactive' | translate }}</label>
+      <cl-input-switch styleClasses="top-margin" formControlName="isActive" />
+    </div>
+  </div>
+
+  <!-- description -->
+  <div class="row">
+    <div class="col s12 cl-form-field">
+      <label class="cl-input-label">{{ 'description' | translate }}</label>
+      <cl-text-area formControlName="description"
+                    [maxLength]="500"
+                    [showLength]="true"
+                    [placeholder]="'description' | translate"
+                    clValidatorErrors
+                    [showValidatorErrors]="formGroup.controls['description'].touched && !!formGroup.controls['description'].errors"/>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col s12">
+      <cl-tab>
+        <!-- contact info-->
+        <cl-tab-item [active]="true" [tabTitle]="'base-data.person-company.contact-info' | translate">
+            <base-contact-info formGroupName="contactInfo"/>
+        </cl-tab-item>
+
+        <!-- address -->
+        <cl-tab-item [tabTitle]="'base-data.person-company.address-info' | translate">
+            <base-address formGroupName="address"/>
+        </cl-tab-item>
+
+        <!-- bank account info -->
+        <cl-tab-item [tabTitle]="'base-data.person-company.bank-account-info' | translate">
+            <base-bank-account-info formGroupName="bankAccountInfo"/>
+        </cl-tab-item>
+      </cl-tab>
+    </div>
+  </div>
+</section>

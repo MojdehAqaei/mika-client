@@ -1,0 +1,47 @@
+<section [formGroup]="formGroup">
+  <div class="row no-bottom-margin">
+
+    <!-- title -->
+    <div class="col s12 l4 cl-form-field">
+      <label class="cl-input-label cl-required">{{ 'stockroom.fiscal-year.title' | translate }}</label>
+      <cl-input-text placeholder="..."
+                     formControlName="title"
+                     [maxLength]="20"
+                     clValidatorErrors
+                     [showValidatorErrors]="formGroup.controls['title'].touched && !!formGroup.controls['title'].errors"/>
+    </div>
+
+    <!--start date -->
+    <div class="col s12 l4 cl-form-field">
+      <label class="cl-input-label cl-required">{{ 'stockroom.fiscal-year.start-date' | translate }}</label>
+      <cl-date-picker formControlName="startDate"
+                      [clear]="true"
+                      [range]="{min: '', max: formGroup.controls['endDate'].value}"
+                      clValidatorErrors
+                      [showValidatorErrors]="formGroup.controls['startDate'].touched && !!formGroup.controls['startDate'].errors"/>
+    </div>
+
+    <!-- end date -->
+    <div class="col s12 l4 cl-form-field">
+      <label class="cl-input-label cl-required">{{ 'stockroom.fiscal-year.end-date' | translate }}</label>
+      <cl-date-picker formControlName="endDate"
+                      [clear]="true"
+                      [range]="{min: formGroup.controls['startDate'].value, max: ''}"
+                      clValidatorErrors
+                      [showValidatorErrors]="formGroup.controls['endDate'].touched && !!formGroup.controls['endDate'].errors"/>
+    </div>
+  </div>
+
+  <!-- description -->
+  <div class="row">
+    <div class="col s12 cl-form-field">
+      <label class="cl-input-label">{{ 'stockroom.fiscal-year.description' | translate }}</label>
+      <cl-text-area
+        placeholder="..."
+        formControlName="description"
+        clValidatorErrors
+        [showValidatorErrors]="formGroup.controls['description'].touched && !!formGroup.controls['description'].errors"
+      />
+    </div>
+  </div>
+</section>

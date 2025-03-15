@@ -1,0 +1,36 @@
+<cl-form-generator [formSchema]="searchFormSchema"
+                   [formData]="{}"
+                   [lazyValidation]="lazyValidation"
+                   [submitted]="submitted"
+                   (onChange)="clFormService = $event"/>
+
+<!-- action buttons -->
+<div class="row">
+  <div class="col s12 left-align">
+
+    <!-- clear filters -->
+    <cl-button [label]="clearButton.label"
+               [disabled]="clearButton.disabled!"
+               [loading]="clearButton.loading!"
+               [outlined]="clearButton.outlined!"
+               [icon]="clearButton.icon"
+               [iconPosition]="clearButton.iconPosition"
+               [size]="clearButton.size"
+               [styleClasses]="clearButton.styleClass!"
+               [type]="clearButton.type"
+               (onClick)="clearButton.command ? clearButton.command($event) : null"/>
+
+    <!-- search -->
+    <cl-button [label]="searchButton.label"
+               [disabled]="searchButton.disabled!"
+               [loading]="searchButton.loading!"
+               [outlined]="searchButton.outlined!"
+               [icon]="searchButton.icon"
+               [iconPosition]="searchButton.iconPosition"
+               [size]="searchButton.size"
+               [styleClasses]="searchButton.styleClass!"
+               [type]="searchButton.type"
+               (onClick)="searchButton.command ? searchButton.command($event) : null"/>
+
+  </div>
+</div>

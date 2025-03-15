@@ -1,0 +1,26 @@
+<view-header [user]="user()"
+             [fiscalPeriod]="fiscalPeriod()"
+             [selectableUserRoles]="selectedUserRoles()"
+             [selectableFiscalPeriods]="selectableFiscalPeriods()"
+             (changeActiveFiscalPeriod)="changeActiveFiscalPeriod.emit($event)"
+             (changeUserRole)="changeUserRole.emit($event)"/>
+
+@if (showBreadcrumb()) {
+  <cl-breadcrumb/>
+}
+
+<view-favourites/>
+
+<div id="layout-wrapper" class="wrapper"> <!-- <===== do not change the id / used in fitToContent-->
+  <view-sidebar [user]="user()"
+                [menuItems]="menu()"
+                [isMenuExpandedOnPageLoad]="isMenuExpandedOnPageLoad()"
+                (logout)="logout.emit(null)"/>
+  <section id="layout-content" class="content">
+    <div class="content-inner">
+      <ng-content></ng-content>
+    </div>
+  </section>
+</div>
+
+<view-footer/>

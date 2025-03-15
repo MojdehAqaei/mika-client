@@ -1,0 +1,123 @@
+<section [formGroup]="formGroup">
+  <div class="row no-bottom-margin">
+    <!-- order -->
+    <div class="col s12 l4 cl-form-field">
+      <label class="cl-input-label cl-required">{{
+        'purchase-and-orders.invoice.purchase-order' | translate
+      }}</label>
+      <cl-select
+        formControlName="order"
+        [options]="purchaseStepsFacade.purchaseStepsStore.state$().orderList$()"
+        [placeholder]="'select' | translate"
+        [filterable]="true"
+        clValidatorErrors
+        [showValidatorErrors]="
+          formGroup.controls['order'].touched &&
+          !!formGroup.controls['order'].errors
+        "
+      />
+    </div>
+    <!-- purchaseStepNumber -->
+    <div class="col s12 m6 l4 cl-form-field">
+      <label class="cl-input-label cl-required">{{
+        'purchase-and-orders.purchase-steps.reference-number' | translate
+      }}</label>
+      <cl-input-number
+        placeholder="..."
+        formControlName="purchaseStepNumber"
+        clValidatorErrors
+        [showValidatorErrors]="
+          formGroup.controls['purchaseStepNumber'].touched &&
+          !!formGroup.controls['purchaseStepNumber'].errors
+        "
+      />
+    </div>
+    <!-- date -->
+    <div class="col s12 l4 cl-form-field">
+      <label class="cl-input-label cl-required">{{
+        'purchase-and-orders.purchase-steps.date' | translate
+      }}</label>
+      <cl-date-picker
+        [placeholder]="'select-date' | translate"
+        formControlName="date"
+        clValidatorErrors
+        [clear]="true"
+        [showValidatorErrors]="
+          formGroup.controls['date'].touched &&
+          !!formGroup.controls['date'].errors
+        "
+      />
+    </div>
+  </div>
+  <div class="row">
+    <!-- purchaseStepType -->
+    <div class="col s12 l4 cl-form-field">
+      <label class="cl-input-label cl-required">{{
+        'purchase-and-orders.purchase-steps.purchase-type' | translate
+      }}</label>
+      <cl-select
+        [disabled]="purchaseStepsFacade.purchaseStepsStore.state$().editMode$()"
+        formControlName="purchaseStepType"
+        [options]="purchaseTypeOptions"
+        [placeholder]="'select' | translate"
+        clValidatorErrors
+        [showValidatorErrors]="
+          formGroup.controls['purchaseStepType'].touched &&
+          !!formGroup.controls['purchaseStepType'].errors
+        "
+      />
+    </div>
+    <!-- purchaseScale -->
+    <div class="col s12 l4 cl-form-field">
+      <label class="cl-input-label cl-required">{{
+        'purchase-and-orders.purchase-steps.purchase-scale' | translate
+      }}</label>
+      <cl-select
+        [disabled]="purchaseStepsFacade.purchaseStepsStore.state$().editMode$()"
+        formControlName="purchaseScale"
+        [options]="scaleOptions"
+        [placeholder]="'select' | translate"
+        clValidatorErrors
+        [showValidatorErrors]="
+          formGroup.controls['purchaseScale'].touched &&
+          !!formGroup.controls['purchaseScale'].errors
+        "
+      />
+    </div>
+    <!-- purchaseMethod -->
+    <div class="col s12 l4 cl-form-field">
+      <label class="cl-input-label cl-required">{{
+        'purchase-and-orders.purchase-steps.purchase-method' | translate
+      }}</label>
+      <cl-select
+        [disabled]="purchaseStepsFacade.purchaseStepsStore.state$().editMode$()"
+        formControlName="purchaseMethod"
+        [options]="methodOptions"
+        [placeholder]="'select' | translate"
+        clValidatorErrors
+        [showValidatorErrors]="
+          formGroup.controls['purchaseMethod'].touched &&
+          !!formGroup.controls['purchaseMethod'].errors
+        "
+      />
+    </div>
+  </div>
+
+  <!-- description -->
+  <div class="row">
+    <div class="col s12 cl-form-field">
+      <label class="cl-input-label">{{
+        'stockroom.inventory-type.description' | translate
+      }}</label>
+      <cl-text-area
+        placeholder="..."
+        formControlName="description"
+        clValidatorErrors
+        [showValidatorErrors]="
+          formGroup.controls['description'].touched &&
+          !!formGroup.controls['description'].errors
+        "
+      />
+    </div>
+  </div>
+</section>

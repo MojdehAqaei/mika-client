@@ -1,0 +1,46 @@
+<!-- add/edit form -->
+<section [formGroup]="formGroup">
+  <div class="row no-bottom-margin">
+    <!-- subgroup title -->
+    <div class="col s12 l4 cl-form-field">
+      <label class="cl-input-label cl-required">{{ 'base-data.sub-group-title' | translate }}</label>
+      <cl-input-text formControlName="title"
+                     clValidatorErrors
+                     [showValidatorErrors]="formGroup.controls['title'].touched && !!formGroup.controls['title'].errors"/>
+    </div>
+
+    <!-- subgroup code -->
+    <div class="col s12 l4 cl-form-field">
+      <label class="cl-input-label cl-required">{{ 'base-data.sub-group-code' | translate }}</label>
+      <!--<cl-input-number formControlName="code"
+                       clValidatorErrors
+                       [showValidatorErrors]="formGroup.controls['code'].touched && !!formGroup.controls['code'].errors"/>-->
+      <cl-input-group [addons]="addons"
+                      formControlName="code"
+                      clKeyFilter="int"
+                      styleClasses="goods-group-code"
+                      clValidatorErrors
+                      [showValidatorErrors]="formGroup.controls['code'].touched && !!formGroup.controls['code'].errors"/>
+    </div>
+
+    <!-- active/ inactive -->
+    <div class="col s12 l4 cl-form-field">
+      <label class="cl-input-label cl-required">{{ 'active-inactive' | translate }}</label>
+      <cl-input-switch styleClasses="top-margin" formControlName="isActive" />
+    </div>
+  </div>
+
+  <!-- description -->
+  <div class="row">
+    <div class="col s12">
+      <label class="cl-input-label">{{ 'description' | translate }}</label>
+      <cl-text-area
+        formControlName="description"
+        [maxLength]="500"
+        [showLength]="true"
+        [placeholder]="'description' | translate"
+        clValidatorErrors
+        [showValidatorErrors]="formGroup.controls['description'].touched && !!formGroup.controls['description'].errors"/>
+    </div>
+  </div>
+</section>

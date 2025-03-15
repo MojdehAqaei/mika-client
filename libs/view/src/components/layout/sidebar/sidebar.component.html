@@ -1,0 +1,97 @@
+<div class="sidebar-wrapper">
+  <!-- close button -->
+  <div class="left-align" [style.padding-left]="'16px'" [style.visibility]="isMenuExpandedOnPageLoad() ? 'visible' : 'hidden'">
+    <i class="material-icons tiny pointer" (click)="isMenuExpandedOnPageLoad.set(false)">close</i>
+  </div>
+
+  <div class="sidebar-wrapper-inner"
+       [ngClass]="isMenuExpandedOnPageLoad() ? 'menu-open' : 'menu-closed'"
+       (mouseenter)="isMenuExpandedOnPageLoad.set(true)">
+
+    <!-- user profile -->
+    <div class="user-profile-card">
+      @if (isMenuExpandedOnPageLoad()) {
+        <!-- header -->
+        <div class="header">
+          <div class="wrapper">
+            <div class="avatar">
+              <cl-avatar type="label" shape="circle" [value]="user().userName.charAt(0) + ' ' + user().userLName.charAt(0)"/>
+            </div>
+            <div class="title">
+              <h1>{{user() | ClObjectToString: 'userName' : 'userLName'}}</h1>
+              <small>{{user()  | ClObjectToString: 'roleName'}}</small>
+            </div>
+          </div>
+
+          <i class="material-icons"
+             (click)="isUserProfileOpen = !isUserProfileOpen"
+             [ngStyle]="{ transform: isUserProfileOpen ? 'rotate(180deg)' : 'rotate(0deg)' }"
+             style="align-self: baseline">keyboard_arrow_down</i>
+        </div>
+
+        <!-- description -->
+        <div [@toggleOpen]="isUserProfileOpen ? 'open' : 'closed'" class="description">
+          <div class="divider"></div>
+          <p>{{ 'user-management.national-number' | translate }}: <span>{{user().userNationalNumber}}</span></p>
+          <p>{{ 'organization' | translate }}: <span>{{user()  | ClObjectToString: 'organizationName'}}</span></p>
+        </div>
+      } @else {
+        <cl-avatar type="label" shape="circle" [value]="user().userName.charAt(0) + ' ' + user().userLName.charAt(0)"/>
+      }
+    </div>
+
+
+    <!-- menu -->
+    <ng-container>
+      <ng-container *ngTemplateOutlet="menuRef; context:{ menu: menuItems()}"/>
+
+      <ng-template #menuRef let-menu="menu">
+        @for (menuItem of menu; track menuItem.value) {
+          <a routerLinkActive="active"
+             [routerLink]="menuItem.routerLink"
+             [routerLinkActiveOptions]="{fragment: 'ignored', paths: 'exact', queryParams: 'subset', matrixParams: 'ignored'}"
+             class="menu-item"
+             [ngClass]="isMenuExpandedOnPageLoad() ? 'menu-open' : 'menu-closed'"
+             (click)="menuItem.expanded = !menuItem.expanded">
+              <span>
+                <i class="material-icons">{{menuItem.icon}}</i>
+                @if(isMenuExpandedOnPageLoad()) {
+                  {{ menuItem.label }}
+                }
+              </span>
+
+            @if (menuItem.items?.length && isMenuExpandedOnPageLoad()) {
+              @if (menuItem.expanded) {
+                <i class="material-icons">keyboard_arrow_down</i>
+              } @else {
+                <i class="material-icons">keyboard_arrow_left</i>
+              }
+            }
+          </a>
+
+          @if (menuItem.expanded && menuItem.items?.length && isMenuExpandedOnPageLoad()) {
+            <div class="child">
+              <ng-container *ngTemplateOutlet="menuRef; context:{ menu: menuItem.items}"/>
+            </div>
+          }
+        }
+      </ng-template>
+    </ng-container>
+  </div>
+
+  <!-- user logout -->
+  <div class="exit-button-wrapper" [style.align-self]="isMenuExpandedOnPageLoad() ? 'flex-start' : 'center'">
+    @if (isMenuExpandedOnPageLoad()) {
+      <cl-button [label]="'user-management.user.exit' | translate"
+                 type="danger"
+                 size="sm"
+                 icon="exit_to_app"
+                 [outlined]="true"
+                 (onClick)="logoutUser()"
+                 styleClasses="user-exit-btn"/>
+    } @else {
+      <i class="material-icons red-text">exit_to_app</i>
+    }
+  </div>
+
+</div>

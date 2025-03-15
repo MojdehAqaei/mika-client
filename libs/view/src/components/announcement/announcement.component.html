@@ -1,0 +1,13 @@
+<div class="card" [ngClass]="data.type">
+  <div class="right">
+    <div class="type" [ngClass]="data.type">{{(data.type || '') | translate}}</div>
+    <div class="date">{{'1402/12/23'}}</div>
+  </div>
+
+  <div class="divider" [ngClass]="data.type"></div>
+
+  <div class="left">
+    <div class="summary">{{data.summary}}</div>
+    <div class="title">{{data.detail}}</div>
+  </div>
+</div>

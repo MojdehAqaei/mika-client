@@ -1,0 +1,144 @@
+<section [formGroup]="formGroup">
+  <div class="row no-bottom-margin">
+
+    <!-- goods group -->
+    <div class="col s12 l6 cl-form-field">
+      <label class="cl-input-label cl-required">{{ 'base-data.goods-group' | translate }}</label>
+      <cl-select formControlName="goodsGroupId"
+                 url="goods-service-categories/search/active-leaves"
+                 [placeholder]="goodsFacade.goodsStore.state$().editMode$() ? formGroup.controls['goodsGroupLabel'].value : ('select' | translate)"
+                 [filterable]="true"
+                 [lazyFilter]="true"
+                 [optionLabel]="['title', 'code']"
+                 [httpContext]="httpContext"
+                 optionValue="id"
+                 (onSelect)="getFeatureListByGoodsGroupId($event)"
+                 clValidatorErrors
+                 [showValidatorErrors]="formGroup.controls['goodsGroupId'].touched && !!formGroup.controls['goodsGroupId'].errors"/>
+    </div>
+
+    <!-- access type -->
+    <div class="col s12 l6 cl-form-field">
+      <label class="cl-input-label cl-required">{{ 'base-data.goods.access-type' | translate }}</label>
+      <cl-select formControlName="accessTypeId"
+                 url="goods-service-acc-types/get-all"
+                 [placeholder]="goodsFacade.goodsStore.state$().editMode$() ? formGroup.controls['accessTypeTitle'].value : ('select' | translate)"
+                 optionValue="id"
+                 [optionLabel]="['title']"
+                 [httpContext]="httpContext"
+                 (onSelect)="setAccessTypeTitle($event)"
+                 clValidatorErrors
+                 [showValidatorErrors]="formGroup.controls['accessTypeId'].touched && !!formGroup.controls['accessTypeId'].errors"/>
+    </div>
+  </div>
+
+  <div class="row no-bottom-margin">
+    <!-- serial type -->
+    <div class="col s12 l6 cl-form-field">
+      <label class="cl-input-label cl-required">{{ 'base-data.goods.serial-type' | translate }}</label>
+      <cl-select formControlName="serialType"
+                 [options]="serialTypeOptions"
+                 [filterable]="serialTypeOptions && serialTypeOptions.length > 5"
+                 clValidatorErrors
+                 [showValidatorErrors]="formGroup.controls['serialType'].touched && !!formGroup.controls['serialType'].errors"/>
+    </div>
+
+    <!-- counting unit -->
+    <div class="col s12 l6 cl-form-field">
+      <label class="cl-input-label cl-required">{{ 'base-data.counting-unit.type' | translate }}</label>
+      <cl-select formControlName="countingUnitId"
+                 url="measurements/get-all-active"
+                 [placeholder]="goodsFacade.goodsStore.state$().editMode$() ? formGroup.controls['countingUnitTitle'].value : ('select' | translate)"
+                 [optionLabel]="['title']"
+                 optionValue="id"
+                 [filterable]="true"
+                 [httpContext]="httpContext"
+                 clValidatorErrors
+                 [showValidatorErrors]="formGroup.controls['countingUnitId'].touched && !!formGroup.controls['countingUnitId'].errors"/>
+    </div>
+  </div>
+
+  <div class="row no-bottom-margin">
+
+    <!-- barcode -->
+    <div class="col s12 l6 cl-form-field">
+      <label class="cl-input-label">{{ 'base-data.barcode' | translate }}</label>
+      <cl-input-text formControlName="barcode"
+                     clKeyFilter="num"
+                     clValidatorErrors
+                     [showValidatorErrors]="formGroup.controls['barcode'].touched && !!formGroup.controls['barcode'].errors"/>
+    </div>
+
+    <!-- is float-->
+    <div class="col s12 l6 cl-form-field">
+      <label class="cl-input-label">{{ ('base-data.is-float-number' | translate)  }}</label>
+      <cl-input-switch styleClasses="top-margin" formControlName="isFloat" />
+    </div>
+  </div>
+
+  <!-- active/ inactive -->
+  <div class="row">
+    <div class="col s12 cl-form-field">
+      <label class="cl-input-label">{{ ('active-inactive' | translate)  }}</label>
+      <cl-input-switch formControlName="isActive" />
+    </div>
+  </div>
+
+  <!-- feature list -->
+  @if (features.controls.length) {
+    <div class="row">
+      <div class="col s12" formArrayName="features">
+        @for (featureForm of features.controls; track featureForm.get('id')) {
+          <div class="row no-bottom-margin sortable-feature-item" [formGroupName]="$index">
+
+            <!-- feature value -->
+            <div class="col s12 m6 cl-form-field">
+              <label class="cl-input-label"
+                     [ngClass]="{'cl-required': featureForm.get('goodsGroupFeatureRequired')?.value == true}">
+                {{ featureForm.get('featureLabel')?.value }}
+              </label>
+              @switch (featureForm.get('featureType')?.value) {
+                @case ('LIST') {
+                  <cl-select [options]="featureForm.get('featureValues')?.value"
+                             [filterable]="featureForm.get('featureValues')?.value && featureForm.get('featureValues')?.value.length > 5"
+                             [showClearIcon]="false"
+                             formControlName="value"
+                             (onSelect)="setSelectedOptionLabel($event, $index)"
+                             clValidatorErrors
+                             [showValidatorErrors]="!!featureForm?.get('value')?.touched && !!featureForm?.get('value')?.errors"/>
+                }
+                @case ('NUMBER') {
+                  <cl-input-text formControlName="label"
+                                 clKeyFilter="int"
+                                 clValidatorErrors
+                                 [showValidatorErrors]="!!featureForm?.get('label')?.touched && !!featureForm?.get('label')?.errors"/>
+                }
+              }
+            </div>
+
+            <!-- feature description -->
+            <div class="col s12 m6 cl-form-field">
+              <label class="cl-input-label">{{ ('description' | translate) + ' ' + featureForm.get('featureLabel')?.value }}</label>
+              <cl-input-text formControlName="description" />
+            </div>
+
+          </div>
+        }
+      </div>
+    </div>
+  }
+
+  <!-- description -->
+  <div class="row">
+    <div class="col s12 cl-form-field">
+      <label class="cl-input-label">{{ 'description' | translate }}</label>
+      <cl-text-area formControlName="description"
+                    [maxLength]="500"
+                    [showLength]="true"
+                    [placeholder]="'description' | translate"
+                    clValidatorErrors
+                    [showValidatorErrors]="formGroup.controls['description'].touched && !!formGroup.controls['description'].errors"/>
+    </div>
+  </div>
+</section>
+

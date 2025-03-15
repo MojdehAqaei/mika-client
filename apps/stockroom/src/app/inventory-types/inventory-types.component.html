@@ -1,0 +1,26 @@
+<view-crud [metaData]="appFacade.appStore.state$().pageMetadata$()"
+           [data]="inventoryTypeFacade.inventoryTypeStore.state$().inventoryTypes$()"
+           [cols]="cols"
+           [tableActions]="actions"
+           [allowedActions]="inventoryTypeFacade.inventoryTypeStore.state$().allowedActions$()"
+           [searchFilters]="searchFilters"
+           [filtersLabels]="inventoryTypeFacade.inventoryTypeStore.state$().searchFilterLabels$()"
+           [toggleDrawer]="toggleDrawer"
+           [showPaginator]="showPaginator$()"
+           [editMode]="inventoryTypeFacade.inventoryTypeStore.state$().editMode$()"
+           [dialogVisible]="inventoryTypeFacade.inventoryTypeStore.state$().dialogVisible$()"
+           [dialogHeader]="inventoryTypeFacade.inventoryTypeStore.state$().editMode$() ? ('stockroom.inventory-type.edit' | translate) : ('stockroom.inventory-type.add' | translate)"
+           [dialogLoading]="inventoryTypeFacade.inventoryTypeStore.state$().dialogLoading$()"
+           [totalRecords]="inventoryTypeFacade.inventoryTypeStore.state$().total$()"
+           [first]="first$()"
+           [rows]="inventoryTypeFacade.inventoryTypeStore.state$().pageSize$()"
+           (page)="page($event)"
+           (add)="setEditMode()"
+           (saveOrUpdate)="saveOrUpdateInventoryType()"
+           (dismiss)="resetForm()"
+           (search)="filterInventoryTypes($event)"
+           (clear)="clearFilters()">
+  <ng-template #addEditDialog>
+    <stockroom-add-inventory-type />
+  </ng-template>
+</view-crud>

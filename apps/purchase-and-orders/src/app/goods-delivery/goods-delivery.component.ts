@@ -1,0 +1,358 @@
+import {
+  Component,
+  computed,
+  effect,
+  Inject,
+  inject,
+  OnInit,
+  signal, untracked,
+  ViewEncapsulation,
+  WritableSignal
+} from '@angular/core';
+import { ClAction, ClColumn, ClColumnDataType, ClConfirmation, ClTableData } from '@sadad/component-lib/src/models';
+import { AddEditGoodsDeliveryComponent } from '../add-edit-goods-delivery/add-edit-goods-delivery.component';
+import { CommonModules, CONFIRMATION_SERVICE_CONFIG } from '@view/lib/values';
+import { GoodsDeliveryFacade } from '@state/lib/facade';
+import { BaseComponent, CrudComponent } from '@view/lib/components';
+import {
+  GoodsDeliveryModel,
+  GoodsDeliveryStateEnum,
+  GoodsDeliveryTypeEnum,
+  GoodsDeliveryGateway,
+  GoodsDeliveryItemGateway,
+  SerialNumberGateway,
+  goodsDeliveryStateDataMapper,
+  saveGoodsDeliveryUseCaseProvider,
+  updateGoodsDeliveryUseCaseProvider,
+  deleteGoodsDeliveryUseCaseProvide,
+  changeDeliveryStateUseCaseProvider,
+  getDeliveryItemsByDeliveryIdUseCaseProvider,
+  getDeliveryListUseCaseProvider,
+  exportDeliveryListExcelFileUseCaseProvider,
+  updateDeliveryItemsListUseCaseProvider,
+  updateDeliveryItemsInformaticsSerialNumberListUseCaseProvider,
+  exportDeliverySerialNumbersExcelFileUseCaseProvider,
+  getAvailableInformaticsSerialNumbersByDeliveryItemIdUseCaseProvider,
+  getAllSelectableInformaticsSerialNumbersByDeliveryItemIdUseCaseProvider
+} from '@domain/lib/purchase-and-orders';
+import {
+  GoodsDeliveryImplementationService,
+  GoodsDeliveryItemImplementationService,
+  SerialNumberImplementationService
+} from '@api/lib/impl';
+import { GoodsDeliveryItemListComponent } from '../goods-delivery-item-list/goods-delivery-item-list.component';
+import { ChangeGoodsDeliveryStateComponent } from '../change-goods-delivery-state/change-goods-delivery-state.component';
+import { DataTableAction } from '@view/lib/models';
+import { ClConfirmationService } from '@sadad/component-lib/src/services';
+import { cacheClear } from '@sadad/component-lib/src/decorators';
+import { Crud } from '@view/lib/data-types';
+import { ActionInvokeService } from '@view/lib/ui-services';
+
+
+@Component({
+  selector: 'purchase-goods-delivery',
+  standalone: true,
+  imports: [CommonModules, CrudComponent, AddEditGoodsDeliveryComponent, GoodsDeliveryItemListComponent, ChangeGoodsDeliveryStateComponent],
+  templateUrl: './goods-delivery.component.html',
+  styleUrl: './goods-delivery.component.scss',
+  encapsulation: ViewEncapsulation.None,
+  providers: [
+    {provide: GoodsDeliveryGateway, useClass: GoodsDeliveryImplementationService},
+    {provide: GoodsDeliveryItemGateway, useClass: GoodsDeliveryItemImplementationService},
+    {provide: SerialNumberGateway, useClass: SerialNumberImplementationService},
+    saveGoodsDeliveryUseCaseProvider,
+    updateGoodsDeliveryUseCaseProvider,
+    deleteGoodsDeliveryUseCaseProvide,
+    getDeliveryItemsByDeliveryIdUseCaseProvider,
+    getDeliveryListUseCaseProvider,
+    exportDeliveryListExcelFileUseCaseProvider,
+    changeDeliveryStateUseCaseProvider,
+    updateDeliveryItemsListUseCaseProvider,
+    updateDeliveryItemsInformaticsSerialNumberListUseCaseProvider,
+    exportDeliverySerialNumbersExcelFileUseCaseProvider,
+    getAvailableInformaticsSerialNumbersByDeliveryItemIdUseCaseProvider,
+    getAllSelectableInformaticsSerialNumbersByDeliveryItemIdUseCaseProvider,
+    GoodsDeliveryFacade
+  ]
+})
+export class GoodsDeliveryComponent extends BaseComponent<GoodsDeliveryModel> implements OnInit {
+  protected readonly goodsDeliveryFacade = inject(GoodsDeliveryFacade);
+  readonly #confirmationService = inject(ClConfirmationService);
+  readonly #invokeService = inject(ActionInvokeService);
+
+  contentDialogActiveIndex: number = 0;
+  cols!: ClColumn[];
+  actions?: DataTableAction[];
+  goodsDeliveryStateEnum: typeof GoodsDeliveryStateEnum= GoodsDeliveryStateEnum;
+
+  actionsType: WritableSignal<Crud> = signal<Crud>('Create');
+  actionTitle: WritableSignal<string> = signal<string>('');
+
+  constructor(@Inject(CONFIRMATION_SERVICE_CONFIG) public confirmationConfig: ClConfirmation) {
+    super();
+
+    effect(() => {
+      const activeFiscalPeriod = this.appFacade.appStore.state$().activeFiscalPeriod$();
+      untracked(() => {
+        if (activeFiscalPeriod?.id) {
+          cacheClear['updateGoodsDeliveryList'].clear();
+          this.goodsDeliveryFacade.updateGoodsDeliveryList({});
+        }
+      });
+    });
+  }
+
+  ngOnInit() {
+    this.first$ = computed(() => this.goodsDeliveryFacade.goodsDeliveryStore.state$().pageNumber$() * this.goodsDeliveryFacade.goodsDeliveryStore.state$().pageSize$());
+    this.showPaginator$ = computed(() => this.goodsDeliveryFacade.goodsDeliveryStore.state$().total$() > this.goodsDeliveryFacade.goodsDeliveryStore.state$().pageSize$());
+    this.goodsDeliveryFacade.updateAllowedActions(this.appFacade.appStore.state$().loggedInUser$()?.permissions?.find(p => p.data.name == this.permissionKey)?.data?.value || []);
+
+    this.cols =  [
+      {
+        colSpan: 1,
+        value: ['autoGeneratedCode'],
+        type: ClColumnDataType.TEXT,
+        header: this.translate.instant('purchase-and-orders.goods-delivery.code')
+      },
+      {
+        colSpan: 1,
+        value: ['datePersian'],
+        type: ClColumnDataType.TEXT,
+        header: this.translate.instant('purchase-and-orders.goods-delivery.date')
+      },
+      {
+        colSpan: 1,
+        value: ['deliveryTypeString'],
+        type: ClColumnDataType.TEXT,
+        header: this.translate.instant('purchase-and-orders.goods-delivery.type')
+      },
+      {
+        colSpan: 1,
+        value: ['delivererLabel'],
+        type: ClColumnDataType.TEXT,
+        header: this.translate.instant('purchase-and-orders.goods-delivery.deliverer')
+      },
+      {
+        colSpan: 1,
+        value: ['receiverLabel'],
+        type: ClColumnDataType.TEXT,
+        header: this.translate.instant('purchase-and-orders.goods-delivery.receiver')
+      },
+      {
+        colSpan: 1,
+        value: ['state'],
+        valueMapper: [goodsDeliveryStateDataMapper],
+        cellConfig: [
+          { key: "state", value: GoodsDeliveryStateEnum.INITIAL_SUBMIT, styleClass: "goods-delivery-state initial-submit" },
+          { key: "state", value: GoodsDeliveryStateEnum.READY_FOR_DELIVERY, styleClass: "goods-delivery-state ready-for-delivery" },
+          { key: "state", value: GoodsDeliveryStateEnum.SENT_FROM_SOURCE, styleClass: "goods-delivery-state source-delivery-confirmed" },
+          { key: "state", value: GoodsDeliveryStateEnum.RECEIVED_AT_DESTINATION, styleClass: "goods-delivery-state destination-delivery-confirmed" },
+          { key: "state", value: GoodsDeliveryStateEnum.CANCELED, styleClass: "goods-delivery-state canceled" },
+        ],
+        type: ClColumnDataType.TEXT,
+        header: this.translate.instant('status')
+      }
+    ];
+
+    this.actions = [
+      {
+        label: this.translate.instant('edit'),
+        icon: 'edit',
+        index: 0,
+        styleClasses: 'blue-text text-darken-2',
+        status: {
+          status: false,
+          on: [
+            { rowField: 'state', rowValue: [GoodsDeliveryStateEnum.INITIAL_SUBMIT] }
+          ]
+        },
+        command: (event) => this.openEditDialog(event, 'Update'),
+        key: 'Update'
+      },
+      {
+        label: this.translate.instant('delete'),
+        icon: 'delete',
+        index: 1,
+        styleClasses: 'red-text text-darken-2',
+        status: {
+          status: false,
+          on: [
+            { rowField: 'state', rowValue: [GoodsDeliveryStateEnum.INITIAL_SUBMIT] }
+          ]
+        },
+        command: (event) => this.deleteDelivery(event),
+        key: 'Delete'
+      },
+      {
+        label: this.translate.instant('finalize-submit'),
+        icon: 'send',
+        index: 2,
+        styleClasses: 'amber-text text-darken-2',
+        status: {
+          status: false,
+          on: [
+            { rowField: 'state', rowValue: [GoodsDeliveryStateEnum.INITIAL_SUBMIT] }
+          ]
+        },
+        command: (event) => this.confirmDeliveryStateChange(event,
+          (event.row as GoodsDeliveryModel).deliveryType == GoodsDeliveryTypeEnum.PURCHASE_AND_DELIVERY_TO_INVENTORY ||
+          (event.row as GoodsDeliveryModel).deliveryType == GoodsDeliveryTypeEnum.PURCHASE_AND_DELIVERY_TO_ORGANIZATION
+          ? GoodsDeliveryStateEnum.SENT_FROM_SOURCE
+          : GoodsDeliveryStateEnum.READY_FOR_DELIVERY),
+        key: 'Finalize'
+      },
+      {
+        label: this.translate.instant('purchase-and-orders.goods-delivery.origin-delivery-confirm'),
+        icon: 'package',
+        index: 3,
+        styleClasses: 'purple-text text-darken-2',
+        status: {
+          status: false,
+          on: [
+            { rowField: 'state', rowValue: [GoodsDeliveryStateEnum.READY_FOR_DELIVERY] }
+          ]
+        },
+        command: (event) => this.openDeliveryStateDialog(event, GoodsDeliveryStateEnum.SENT_FROM_SOURCE),
+        key: 'DeliveryConfirmation'
+      },
+      {
+        label: this.translate.instant('purchase-and-orders.goods-delivery.destination-receive-confirm'),
+        icon: 'receipt',
+        index: 4,
+        styleClasses: 'green-text text-darken-2',
+        status: {
+          status: false,
+          on: [
+            { rowField: 'state', rowValue: [GoodsDeliveryStateEnum.SENT_FROM_SOURCE] }
+          ]
+        },
+        command: (event) => this.openDeliveryStateDialog(event, GoodsDeliveryStateEnum.RECEIVED_AT_DESTINATION),
+        key: 'ReceiverConfirmation'
+      },
+      {
+        label: this.translate.instant('purchase-and-orders.goods-delivery.save-serial-number'),
+        icon: 'barcode',
+        index: 5,
+        styleClasses: 'brown-text text-darken-2',
+        status: {
+          status: false,
+          on: [
+            { rowField: 'state', rowValue: [GoodsDeliveryStateEnum.READY_FOR_DELIVERY, GoodsDeliveryStateEnum.SENT_FROM_SOURCE] },
+            // { rowField: 'deliveryType', rowValue: [GoodsDeliveryTypeEnum.PURCHASE_AND_DELIVERY_TO_ORGANIZATION, GoodsDeliveryTypeEnum.PURCHASE_AND_DELIVERY_TO_INVENTORY] },
+          ]
+        },
+        command: (event) => this.openEditDialog(event, 'InformaticSerial'),
+        key: 'InformaticSerial'
+      },
+      {
+        label: this.translate.instant('cancel'),
+        icon: 'cancel',
+        index: 6,
+        styleClasses: 'red-text text-darken-2',
+        status: {
+          status: false,
+          on: [
+            { rowField: 'state', rowValue: [GoodsDeliveryStateEnum.INITIAL_SUBMIT, GoodsDeliveryStateEnum.READY_FOR_DELIVERY] }
+          ]
+        },
+        command: (event) => this.confirmDeliveryStateChange(event, GoodsDeliveryStateEnum.CANCELED),
+        key: 'Cancel'
+      }
+    ];
+  }
+
+  openEditDialog(event: { action: ClAction, row: GoodsDeliveryModel }, action: Crud) {
+    this.actionsType.set(action);
+    this.actionTitle.set(action == 'Update' ? this.translate.instant('purchase-and-orders.goods-delivery.edit') : this.translate.instant('purchase-and-orders.goods-delivery.save-serial-number'));
+    this.contentDialogActiveIndex = 0;
+    this.goodsDeliveryFacade.toggleEditMode(action == 'Update');
+    this.goodsDeliveryFacade.updateSelectedGoodsDelivery(event.row);
+    this.goodsDeliveryFacade.toggleDialogVisibility(true);
+  }
+
+  setEditMode() {
+    this.contentDialogActiveIndex = 0;
+    this.goodsDeliveryFacade.updateSelectedGoodsDelivery({});
+    this.actionsType.set('Create');
+    this.actionTitle.set(this.translate.instant('purchase-and-orders.goods-delivery.add'));
+    this.goodsDeliveryFacade.toggleEditMode(false);
+    this.goodsDeliveryFacade.toggleDialogVisibility(true);
+  }
+
+  resetForm() {
+    this.goodsDeliveryFacade.toggleDialogVisibility(false);
+  }
+
+  downloadSerialNumbersExcel(event: GoodsDeliveryModel) {
+    this.goodsDeliveryFacade.exportGoodsDeliverySerialNumbersExcelFile(event || {});
+  }
+
+  downloadExcel(event: GoodsDeliveryModel) {
+    this.goodsDeliveryFacade.exportGoodsDeliveryListExcelFile(event || {});
+  }
+
+  filterGoodsDelivery(event: GoodsDeliveryModel) {
+    this.goodsDeliveryFacade.updatePage(this.goodsDeliveryFacade.goodsDeliveryStore.state$().pageSize$(), 0);
+    cacheClear['updateGoodsDeliveryList'].clear();
+    this.goodsDeliveryFacade.updateGoodsDeliveryList(
+      {
+        ...event,
+        pageNumber: this.goodsDeliveryFacade.goodsDeliveryStore.state$().pageNumber$(),
+        pageSize: this.goodsDeliveryFacade.goodsDeliveryStore.state$().pageSize$()
+      });
+  }
+
+  clearFilters() {
+    cacheClear['updateGoodsDeliveryList'].clear();
+    // this.formGroup?.markAsUntouched();
+  }
+
+  page(event: { rows: number, first: number, page: number } & GoodsDeliveryModel) {
+    cacheClear['updateGoodsDeliveryList'].clear();
+    this.goodsDeliveryFacade.updatePage(event.rows, event.page - 1);
+    this.goodsDeliveryFacade.updateGoodsDeliveryList(
+      {
+        ...event,
+        pageNumber: this.goodsDeliveryFacade.goodsDeliveryStore.state$().pageNumber$(),
+        pageSize: this.goodsDeliveryFacade.goodsDeliveryStore.state$().pageSize$()
+      });
+  }
+
+  getDeliveryItemsList(item: ClTableData) {
+    const row = item?.data as GoodsDeliveryModel;
+    this.goodsDeliveryFacade.updateSelectedGoodsDelivery(row);
+    row.id && !row.ifDeliveryItemsLoaded ? this.goodsDeliveryFacade.updateSelectedGoodsDeliveryItemsListByDeliveryId(row.id) : '';
+  }
+
+  deleteDelivery(event: { action: ClAction, row: GoodsDeliveryModel }) {
+    this.actionsType.set('Delete');
+    this.#confirmationService.confirm(this.viewRef, {
+      ...this.confirmationConfig,
+      message: this.translate.instant('messages.wannaDelete'),
+      accept: () => event.row.id ? this.goodsDeliveryFacade.deletedGoodsDelivery(event.row.id) : ''
+    });
+  }
+
+  confirmDeliveryStateChange(event: { action: DataTableAction, row: GoodsDeliveryModel }, nextState: GoodsDeliveryStateEnum) {
+    this.#confirmationService.confirm(this.viewRef, {
+      ...this.confirmationConfig,
+      message: this.translate.instant('messages.sure-to-change-state', {value: this.translate.instant('purchase-and-orders.goods-delivery.')}),
+      accept: () => this.goodsDeliveryFacade.updateDeliveryState(
+        {
+          ...event.row,
+          nextState: nextState
+        })
+    });
+  }
+
+  openDeliveryStateDialog(event: { action: DataTableAction, row: GoodsDeliveryModel }, nextState: GoodsDeliveryStateEnum) {
+    event.action.key ? this.actionsType.set(event.action.key) : '';
+    this.actionTitle.set(this.translate.instant('purchase-and-orders.goods-delivery.change-state'));
+    this.goodsDeliveryFacade.updateSelectedGoodsDelivery({...event.row, nextState: nextState});
+    this.goodsDeliveryFacade.toggleDialogVisibility(true);
+  }
+
+  changeDeliveryStateOrSerialNumber() {
+    this.#invokeService.invokeMethod('change delivery state or serial number');
+  }
+}

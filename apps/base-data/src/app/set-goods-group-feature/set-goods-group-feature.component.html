@@ -1,0 +1,85 @@
+@if (formGroup.touched && errorAlert.summary != '') {
+  <cl-alert-message [messages]="[errorAlert]"/>
+}
+<cl-alert-message [messages]="[infoAlert]"/>
+
+<div class="row">
+  <!-- feature list-->
+  <div class="col s12 m8 no-right-padding">
+    <label class="cl-input-label">{{ 'feature' | translate }}</label>
+    <cl-select [filterable]="true"
+               [lazyFilter]="true"
+               [filterPlaceholder]= "'search-with-name'| translate"
+               optionValue="id"
+               [optionLabel]="['title']"
+               url="properties/search/active-properties"
+               [httpContext]="httpContext"
+               (onSelect)="addSelectedFeatureToGoodsGroupFeatures($event)" />
+  </div>
+
+  <!-- add button -->
+  <div class="col s12 m4 no-left-padding add-button-wrapper">
+    <cl-button [label]="featureAdd.label"
+               [disabled]="featureAdd.disabled!"
+               [loading]="featureAdd.loading!"
+               [outlined]="featureAdd.outlined!"
+               [icon]="featureAdd.icon"
+               [iconPosition]="featureAdd.iconPosition"
+               [size]="featureAdd.size"
+               [styleClasses]="featureAdd.styleClass"
+               [type]="featureAdd.type"
+               (onClick)="featureAdd.command ? featureAdd.command($event) : null"/>
+  </div>
+</div>
+
+<section [formGroup]="formGroup">
+  <div class="feature-list-wrapper" formArrayName="list" cdkDropList (cdkDropListDropped)="drop($event)">
+    <!-- header -->
+    <div class="feature-list-inner-heading center-align">
+      <div class="feature-list-inner-heading-index">{{ 'row' | translate }}</div>
+      <div class="feature-list-inner-heading-label">{{ 'base-data.feature-title' | translate }}</div>
+      <div class="feature-list-inner-heading-required">{{ 'required' | translate }}</div>
+      <div class="feature-list-inner-heading-delete">{{ 'delete' | translate }}</div>
+    </div>
+
+    <!-- content -->
+    @for (form of featureForm.controls; track form.get('featureId')) {
+      @if (rows * (currentPage -1) <= $index && $index < rows * currentPage) {
+        <div class="feature-list-inner center-align" [formGroupName]="$index" cdkDrag>
+
+          <!-- index -->
+          <div class="feature-list-inner-index">{{$index+1}}</div>
+
+          <!-- feature label -->
+          <div class="feature-list-inner-label">
+            <label>{{ form.get('featureLabel')?.value }}</label>
+          </div>
+
+          <!-- required -->
+          <div class="feature-list-inner-required">
+            <cl-input-switch styleClasses="top-margin" formControlName="required" />
+          </div>
+
+          <!-- delete -->
+          <div class="feature-list-inner-delete">
+            <i class="material-icons red-text text-darken-2 pointer" (click)="deleteRow(form.get('featureId')?.value)">delete</i>
+          </div>
+        </div>
+      }
+    }
+
+    @if (!featureForm.controls.length) {
+      <div class="padding center-align">{{ 'messages.no-record' | translate }}</div>
+    }
+  </div>
+</section>
+
+
+@if (featureForm.controls.length > rows) {
+  <cl-paginator [first]="first"
+                [rows]="rows"
+                [alwaysShow]="false"
+                [totalRecords]="featureForm.controls.length"
+                (onPageChange)="page($event)"/>
+}
+

@@ -1,0 +1,109 @@
+.app {
+  display: flex;
+  flex-direction: row;
+  .content {
+    flex-grow: 1;
+    align-self: stretch;
+    &.has-drawer {
+    }
+    .cl-header {
+      border-bottom: solid 1px #d3cfcf;
+      box-shadow: none;
+      padding: 34px 24px;
+      .cl-image {
+        position: relative;
+        margin-left: 16px;
+        &:after {
+          content: '';
+          position: absolute;
+          width: 1px;
+          background-color: #cbd5e1;
+          height: 50px;
+          left: calc((-0.5em - 16px) / 2);
+          top: 0;
+          bottom: 0;
+          margin: auto;
+        }
+      }
+    }
+  }
+}
+
+
+.loading-wrapper {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 9999999999999;
+  background-color: rgb(255, 255, 255, 0.25);
+  cursor: progress;
+  /*filter: blur(5px);
+  -webkit-filter: blur(5px);
+  -ms-filter: blur(5px);*/
+}
+
+.cl-breadcrumb {
+  background-color: white;
+  margin: 0;
+  border-radius: 0;
+  border: 0;
+  border-bottom: solid 1px #d3cfcf;
+}
+
+.dialog {
+  > .cl-dialog-mask {
+    //background-color: transparent;
+    .cl-dialog {
+      //position: absolute !important;
+      //top: 75px;
+      //z-index: 10;
+      .cl-dialog-content {
+        padding: 0 !important;
+        .cl-user-info-card-header{
+          .user-avatar {
+            background-color: #f3ccb35c;
+          }
+        }
+      }
+    }
+  }
+
+  &.user-role-detail .cl-dialog {
+    //left: 35px !important;
+  }
+  &.fiscal-year .cl-dialog {
+    //left: 195px !important; // 35 + 160
+  }
+  &.notification .cl-dialog {
+    //left: 219px !important; // 195 + 24
+  }
+  &.help .cl-dialog {
+    //left: 243px !important; // 219 + 24
+  }
+
+}
+
+.user-inactivity {
+  width: 100%;
+  height: 100%;
+  font-size: 1.5rem;
+  text-align: center;
+  position: fixed;
+  z-index: 9999999999999999;
+  top: 0;
+  right: 0;
+  background-color: rgba(0,0,0,0.6);
+  color: #ffffff;
+
+  &-text{
+    border: solid 1px #ffffff;
+    width: 80%;
+    padding: 1.8rem;
+    border-radius: 4px;
+    text-shadow: 0 5px 5px #ffffff;
+    margin: calc(50vh - 40px) auto auto;
+  }
+}

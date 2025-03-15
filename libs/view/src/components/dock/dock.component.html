@@ -1,0 +1,7 @@
+<div class="dock" #dockRef [style]="{'--height': dockRef.getBoundingClientRect().height + 'px'}">
+  @for (item of items; track item.index) {
+    <div class="dock-item" (click)="item.command ? item.command() : null">
+      <i class="icon material-icons small">{{item.icon}}</i>
+    </div>
+  }
+</div>

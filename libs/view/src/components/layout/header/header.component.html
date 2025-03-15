@@ -1,0 +1,80 @@
+<cl-header [hasToggleMenu]="false"
+           [appTitle]="'inventory.title' | translate"
+           logoSrc="./assets/img/bank-melli-logo-2.png"
+           [icons]="headerIcons">
+  <ng-template #leftBar>
+    <!-- active fiscal period throughout the application -->
+    @if (fiscalPeriod) {
+      <div class="header-left-bar header-left-bar-active-fiscal-period" (click)="toggleDialog(true, 'fiscal-year', $event)">
+        <i class="material-icons vertical-align-middle">hourglass</i>
+        <span class="title">{{fiscalPeriod?.title}}</span>
+      </div>
+    }
+
+    <!-- logged in user -->
+    @if (user?.isUSerActive) {
+      <div class="header-left-bar header-left-bar-user" (click)="toggleDialog(true, 'user-role-detail', $event)">
+        <i class="material-icons vertical-align-middle">person</i>
+        <span class="title">{{user?.roleName}}</span>
+      </div>
+    }
+  </ng-template>
+</cl-header>
+
+
+<cl-dialog #dialogRef
+           [header]="dialogType == 'user-role-detail' ? ('user-management.user.select-user-role' | translate) : dialogType == 'fiscal-year' ? ('stockroom.fiscal-year.select-active' | translate) : ''"
+           [dismissible]="true"
+           [closeable]="true"
+           [class]="dialogType + ' dialog'"
+           width="350px">
+
+  @switch (dialogType) {
+    @case ('user-role-detail') {
+      <cl-list-box [data]="selectableUserRoles"
+                   [selectable]="true"
+                   [ngModel]="user?.roleId"
+                   (onSelect)="selectedUserRoleId = $event"
+                   styleClasses="header-user-role-detail-dialog"
+                   optionLabel="label"
+                   optionValue="id"/>
+    }
+
+    @case ('notification') {
+      <p>notifications</p>
+    }
+
+    @case ('fiscal-year') {
+      <cl-list-box [data]="selectableFiscalPeriods"
+                   [selectable]="true"
+                   [ngModel]="fiscalPeriod?.id"
+                   (onSelect)="selectedFiscalPeriodId = $event"
+                   styleClasses="header-fiscal-year-dialog"
+                   optionLabel="title"
+                   optionValue="id"/>
+    }
+
+    @case ('help') {
+      <p>help</p>
+    }
+
+    @default {
+
+    }
+  }
+
+  <ng-template clTemplate="footer">
+    <div class="left-align">
+      @if (dialogType == 'user-role-detail' || dialogType == 'fiscal-year') {
+        <cl-button [label]="dialogType == 'user-role-detail' ? ('user-management.role.change' | translate) : ('stockroom.fiscal-year.change' | translate)"
+                   type="info"
+                   size="sm"
+                   (onClick)="dialogRef?.hide(); dialogType == 'user-role-detail'
+                   ? changeUserRole.emit(selectedUserRoleId)
+                     : dialogType == 'fiscal-year'
+                     ? changeActiveFiscalPeriod.emit(selectedFiscalPeriodId)
+                   : null"/>
+      }
+    </div>
+  </ng-template>
+</cl-dialog>

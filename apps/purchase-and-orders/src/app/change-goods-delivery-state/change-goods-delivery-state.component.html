@@ -1,0 +1,52 @@
+<section [formGroup]="formGroup">
+
+  @if(nextState() == goodsDeliveryStateEnum.SENT_FROM_SOURCE || nextState() == goodsDeliveryStateEnum.RECEIVED_AT_DESTINATION) {
+    <div class="row no-bottom-margin">
+
+      <!-- sender / receiver -->
+      <div class="col s12 l6 cl-form-field">
+        <label class="cl-input-label cl-required">{{ nextState() == goodsDeliveryStateEnum.SENT_FROM_SOURCE
+          ? ('purchase-and-orders.goods-delivery.receiverFullName' | translate)
+          : ('purchase-and-orders.goods-delivery.senderFullName' | translate)
+          }}</label>
+        <cl-input-text placeholder="..."
+                       [formControlName]="nextState() == goodsDeliveryStateEnum.SENT_FROM_SOURCE ? 'receiverFullName' : 'delivererFullName'"
+                       clValidatorErrors
+                       [showValidatorErrors]="formGroup.controls[nextState() == goodsDeliveryStateEnum.SENT_FROM_SOURCE ? 'receiverFullName' : 'delivererFullName'].touched && !!formGroup.controls[nextState() == goodsDeliveryStateEnum.SENT_FROM_SOURCE ? 'receiverFullName' : 'delivererFullName'].errors"/>
+      </div>
+
+      <!-- send / receive date -->
+      <div class="col s12 l6 cl-form-field">
+        <label class="cl-input-label cl-required">{{ nextState() == goodsDeliveryStateEnum.SENT_FROM_SOURCE
+          ? ('purchase-and-orders.goods-delivery.sendDate' | translate)
+          : ('purchase-and-orders.goods-delivery.receiveDate' | translate)
+          }}</label>
+        <cl-date-picker [formControlName]="nextState() == goodsDeliveryStateEnum.SENT_FROM_SOURCE ? 'sendDate' : 'receiveDate'"
+                        [clear]="true"
+                        clValidatorErrors
+                        [showValidatorErrors]="formGroup.controls[nextState() == goodsDeliveryStateEnum.SENT_FROM_SOURCE ? 'sendDate' : 'receiveDate'].touched && !!formGroup.controls[nextState() == goodsDeliveryStateEnum.SENT_FROM_SOURCE ? 'sendDate' : 'receiveDate'].errors"/>
+      </div>
+    </div>
+
+
+    <!-- send / receive description  -->
+    <div class="row">
+      <div class="col s12 cl-form-field">
+        <label class="cl-input-label">{{ nextState() == goodsDeliveryStateEnum.SENT_FROM_SOURCE
+          ? ('purchase-and-orders.goods-delivery.sourceDescription' | translate)
+          : ('purchase-and-orders.goods-delivery.destinationDescription' | translate)
+          }}</label>
+        <cl-text-area [formControlName]="nextState() == goodsDeliveryStateEnum.SENT_FROM_SOURCE ? 'sourceAdditionalComments' : 'destinationAdditionalComments'"
+                      [maxLength]="500"
+                      [showLength]="true"
+                      [placeholder]="'description' | translate"
+                      clValidatorErrors
+                      [showValidatorErrors]="formGroup.controls[nextState() == goodsDeliveryStateEnum.SENT_FROM_SOURCE ? 'sourceAdditionalComments' : 'destinationAdditionalComments'].touched && !!formGroup.controls[nextState() == goodsDeliveryStateEnum.SENT_FROM_SOURCE ? 'sourceAdditionalComments' : 'destinationAdditionalComments'].errors"/>
+      </div>
+    </div>
+  }
+</section>
+
+<cl-divider/>
+
+<purchase-goods-delivery-details-preview/>

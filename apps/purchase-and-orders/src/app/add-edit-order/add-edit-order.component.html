@@ -1,0 +1,29 @@
+<section [formGroup]="formGroup">
+
+  <cl-steps [steps]="steps"
+            [readonly]="true"
+            [nextBtnLabel]="'next' | translate"
+            [backBtnLabel]="'back' | translate"
+            [backBtnType]="'default'"
+            [confirmBtnLabel]="'final-save' | translate"
+            [(activeIndex)]="activeIndex"
+            (activeIndexChange)="stepChange.emit($event)"
+            (onNext)="saveOrUpdateOrder()"
+            (onConfirm)="saveOrUpdateOrder(); closeTheDialog()">
+    @switch (activeIndex) {
+      @case (0) {
+        <purchase-order-initial-step formGroupName="initialStep"/>
+      }
+
+      @case (1) {
+        <purchase-order-second-step formGroupName="orderItems"/>
+      }
+
+      @case (2) {
+        <purchase-order-third-step/>
+      }
+    }
+
+  </cl-steps>
+
+</section>

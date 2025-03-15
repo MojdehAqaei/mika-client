@@ -1,0 +1,82 @@
+<section [formGroup]="formGroup">
+  <div class="row no-bottom-margin">
+    <!-- first name-->
+    <div class="col s12 l6 cl-form-field">
+      <label class="cl-input-label cl-required">{{ 'name' | translate }}</label>
+      <cl-input-text placeholder="..."
+                     formControlName="name"
+                     clValidatorErrors
+                     [showValidatorErrors]="formGroup.controls['name'].touched && !!formGroup.controls['name'].errors"/>
+    </div>
+
+    <!-- last name -->
+    <div class="col s12 l6 cl-form-field">
+      <label class="cl-input-label cl-required">{{ 'last-name' | translate }}</label>
+      <cl-input-text placeholder="..."
+                     formControlName="lName"
+                     clValidatorErrors
+                     [showValidatorErrors]="formGroup.controls['lName'].touched && !!formGroup.controls['lName'].errors"/>
+    </div>
+
+  </div>
+
+  <div class="row no-bottom-margin">
+    <!-- national number -->
+    <div class="col s12 l6 cl-form-field">
+      <label class="cl-input-label cl-required">{{ 'user-management.national-number' | translate }}</label>
+      <cl-input-text placeholder="..."
+                     clKeyFilter="num"
+                     formControlName="nationalNumber"
+                     clValidatorErrors
+                     [showValidatorErrors]="formGroup.controls['nationalNumber'].touched && !!formGroup.controls['nationalNumber'].errors"/>
+    </div>
+
+    <!-- employee number -->
+    <div class="col s12 l6 cl-form-field">
+      <label class="cl-input-label">{{ 'user-management.employee-number' | translate }}</label>
+      <cl-input-number placeholder="..."
+                       formControlName="employeeNumber"
+                       clValidatorErrors
+                       [showValidatorErrors]="formGroup.controls['employeeNumber'].touched && !!formGroup.controls['employeeNumber'].errors"/>
+    </div>
+  </div>
+
+  <div class="row no-bottom-margin">
+    <!-- organization -->
+    <div class="col s12 l6 cl-form-field">
+      <label class="cl-input-label cl-required">{{ 'organization' | translate }}</label>
+      <cl-select formControlName="organizationId"
+                 [placeholder]="userFacade.userStore.state$().editMode$() ? formGroup.controls['organizationName'].value : ('select' | translate)"
+                 [lazyFilter]="true"
+                 [filterable]="true"
+                 [filterPlaceholder]= "'search-with-name-or-code'| translate"
+                 optionValue="id"
+                 [optionLabel]="['typeName' , 'name' , '/' , 'code']"
+                 url="organizations/search/actives"
+                 [httpContext]="httpContext"
+                 (onSelect)="setOrganizationName($event)"
+                 clValidatorErrors
+                 [showValidatorErrors]="formGroup.controls['organizationId'].touched && !!formGroup.controls['organizationId'].errors"/>
+    </div>
+
+    <!-- active/ inactive -->
+    <div class="col s12 l6 cl-form-field">
+      <label class="cl-input-label cl-required">{{ 'active-inactive' | translate }}</label>
+      <cl-input-switch styleClasses="top-margin" formControlName="isActive" />
+    </div>
+  </div>
+
+  <div class="row">
+    <!-- description -->
+    <div class="col s12 cl-form-field">
+      <label class="cl-input-label">{{  ('description' | translate) }}</label>
+      <cl-text-area
+        formControlName="description"
+        [maxLength]="500"
+        [showLength]="true"
+        [placeholder]="'description' | translate"
+        clValidatorErrors
+        [showValidatorErrors]="formGroup.controls['description'].touched && !!formGroup.controls['description'].errors"/>
+    </div>
+  </div>
+</section>

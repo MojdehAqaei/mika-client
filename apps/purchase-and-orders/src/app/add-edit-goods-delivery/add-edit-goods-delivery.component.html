@@ -1,0 +1,29 @@
+<section [formGroup]="formGroup">
+
+  <cl-steps [steps]="steps"
+            [readonly]="true"
+            [nextBtnLabel]="'next' | translate"
+            [backBtnLabel]="'back' | translate"
+            [backBtnType]="'default'"
+            [confirmBtnLabel]="'final-save' | translate"
+            [(activeIndex)]="activeIndex"
+            (activeIndexChange)="stepChange.emit($event)"
+            (onConfirm)="closeTheDialog()"
+            (onNext)="saveOrUpdateGoodsDelivery()">
+    @switch (activeIndex) {
+      @case (0) {
+        <purchase-goods-delivery-initial-step formGroupName="initialStep"/>
+      }
+
+      @case (1) {
+        <purchase-goods-delivery-second-step formGroupName="deliveryItemsList"/>
+      }
+
+      @case (2) {
+        <purchase-goods-delivery-details-preview/>
+      }
+    }
+
+  </cl-steps>
+
+</section>

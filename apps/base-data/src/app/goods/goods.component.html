@@ -1,0 +1,26 @@
+<view-crud [metaData]="appFacade.appStore.state$().pageMetadata$()"
+           [data]="goodsFacade.goodsStore.state$().goodsList$()"
+           [cols]="cols"
+           [tableActions]="actions"
+           [allowedActions]="goodsFacade.goodsStore.state$().allowedActions$()"
+           [searchFilters]="searchFilters"
+           [filtersLabels]="goodsFacade.goodsStore.state$().searchFilterLabels$()"
+           [toggleDrawer]="toggleDrawer"
+           [showPaginator]="showPaginator$()"
+           [editMode]="goodsFacade.goodsStore.state$().editMode$()"
+           [dialogHeader]="goodsFacade.goodsStore.state$().editMode$() ? ('base-data.goods.edit' | translate) : ('base-data.goods.add' | translate)"
+           [dialogLoading]="goodsFacade.goodsStore.state$().dialogLoading$()"
+           [dialogVisible]="goodsFacade.goodsStore.state$().dialogVisible$()"
+           [totalRecords]="goodsFacade.goodsStore.state$().total$()"
+           [first]="first$()"
+           [rows]="goodsFacade.goodsStore.state$().pageSize$()"
+           (page)="page($event)"
+           (saveOrUpdate)="saveOrUpdateGoods()"
+           (dismiss)="resetForm()"
+           (search)="filterGoods($event)"
+           (clear)="clearFilters()"
+           (add)="seEditMode()">
+  <ng-template #addEditDialog>
+    <base-add-edit-goods/>
+  </ng-template>
+</view-crud>

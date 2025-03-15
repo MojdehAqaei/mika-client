@@ -1,0 +1,64 @@
+<view-crud [metaData]="appFacade.appStore.state$().pageMetadata$()"
+           [data]="goodsDeliveryFacade.goodsDeliveryStore.state$().goodsDeliveryList$()"
+           [cols]="cols"
+           [tableActions]="actions"
+           [allowedActions]="goodsDeliveryFacade.goodsDeliveryStore.state$().allowedActions$()"
+           [filtersLabels]="goodsDeliveryFacade.goodsDeliveryStore.state$().searchFilterLabels$()"
+           [hasRowExpansion]="true"
+           [hasDialogFooter]="actionsType() == 'DeliveryConfirmation' || actionsType() == 'ReceiverConfirmation' || actionsType() == 'InformaticSerial'"
+           [dialogWidth]="'95vw'"
+           [searchFilters]="searchFilters"
+           [toggleDrawer]="toggleDrawer"
+           [showPaginator]="showPaginator$()"
+           [editMode]="goodsDeliveryFacade.goodsDeliveryStore.state$().editMode$()"
+           [dialogHeader]="actionTitle()"
+           [dialogLoading]="goodsDeliveryFacade.goodsDeliveryStore.state$().dialogLoading$()"
+           [dialogVisible]="goodsDeliveryFacade.goodsDeliveryStore.state$().dialogVisible$()"
+           [totalRecords]="goodsDeliveryFacade.goodsDeliveryStore.state$().total$()"
+           [first]="first$()"
+           [rows]="goodsDeliveryFacade.goodsDeliveryStore.state$().pageSize$()"
+           (page)="page($event)"
+           (saveOrUpdate)="changeDeliveryStateOrSerialNumber()"
+           (dismiss)="resetForm()"
+           (search)="filterGoodsDelivery($event)"
+           (excel)="downloadExcel($event)"
+           (secondExcel)="downloadSerialNumbersExcel($event)"
+           (clear)="clearFilters()"
+           (add)="setEditMode()"
+           (rowExpand)="getDeliveryItemsList($event)">
+  <ng-template #tableRowExpansion let-data="data">
+    <purchase-goods-delivery-item-list class="table-expanded-items" [items]="data.deliveryItemsList" [tableExpandable]="false"/>
+  </ng-template>
+
+  <ng-template #addEditDialog>
+    @switch (actionsType()) {
+      @case ('Update') {
+        <purchase-add-edit-goods-delivery [activeIndex]="contentDialogActiveIndex"
+                                          (stepChange)="contentDialogActiveIndex = $event"/>
+      }
+
+      @case ('Create') {
+        <purchase-add-edit-goods-delivery [activeIndex]="contentDialogActiveIndex"
+                                          (stepChange)="contentDialogActiveIndex = $event"/>
+      }
+
+      @case ('DeliveryConfirmation') {
+        <purchase-change-goods-delivery-state [nextState]="goodsDeliveryStateEnum.SENT_FROM_SOURCE"/>
+      }
+
+      @case ('ReceiverConfirmation') {
+        <purchase-change-goods-delivery-state [nextState]="goodsDeliveryStateEnum.RECEIVED_AT_DESTINATION"/>
+      }
+
+      @case ('InformaticSerial') {
+        <purchase-goods-delivery-item-list [items]="goodsDeliveryFacade.goodsDeliveryStore.state$().selectedGoodsDelivery$().deliveryItemsList || []"
+                                           [canEditSerialNumbers]="true"
+                                           [canDelete]="false"/>
+      }
+
+      @default {
+       <!---->
+      }
+    }
+  </ng-template>
+</view-crud>
